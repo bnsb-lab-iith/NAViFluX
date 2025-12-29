@@ -1,0 +1,50 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@keyframes bounceProfessional {
+    0%,
+    80%,
+    100% {
+        transform: scale(0);
+        opacity: 0.3;
+    }
+    40% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.animate-bounceProfessional {
+    animation: bounceProfessional 1.4s infinite ease-in-out both;
+}
+
+@keyframes dnaFlow {
+    0% {
+        background-position: 0 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+.animation-delay-2000 {
+    animation-delay: 2s;
+}
+.animation-delay-4000 {
+    animation-delay: 4s;
+}
+
+.rf-export-container .react-flow__renderer {
+    position: relative !important;
+}
+
+.rf-export-container .react-flow__nodes {
+    position: absolute !important;
+    inset: 0 !important;
+}
+
+.rf-export-container .react-flow__edges {
+    position: absolute !important;
+    inset: 0 !important;
+}

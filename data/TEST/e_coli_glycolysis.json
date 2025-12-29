@@ -1,0 +1,1587 @@
+{
+  "nodes": [
+    {
+      "id": "PFK",
+      "temp_id": "Glycolysis/Gluconeogenesis__PFK",
+      "type": "custom",
+      "position": {
+        "x": 105,
+        "y": 210
+      },
+      "data": {
+        "abbreviation": "PFK",
+        "info": "Phosphofructokinase",
+        "flux": 7.47738196216028,
+        "subsystem": "Glycolysis/Gluconeogenesis",
+        "lower_bound": 0,
+        "upper_bound": 1000,
+        "color": "rgb(17, 164, 245)",
+        "fontSize": 8,
+        "size": 53.14299838525192,
+        "gene": [
+          "b3916",
+          "b1723"
+        ],
+        "type": "reaction",
+        "BIGG_crossref": [
+          "PFK"
+        ],
+        "KEGG_crossref": [],
+        "EC_crossref": [
+          "2.7.1.11"
+        ],
+        "stoichiometry": {
+          "adp_c": 1,
+          "atp_c": -1,
+          "f6p_c": -1,
+          "fdp_c": 1,
+          "h_c": 1
+        }
+      },
+      "width": 80,
+      "height": 40,
+      "selected": false,
+      "positionAbsolute": {
+        "x": 105,
+        "y": 210
+      },
+      "dragging": false
+    },
+    {
+      "id": "f6p_c",
+      "temp_id": "Glycolysis/Gluconeogenesis__f6p_c",
+      "type": "custom",
+      "position": {
+        "x": 0,
+        "y": 210
+      },
+      "data": {
+        "abbreviation": "f6p_c",
+        "info": "D-Fructose 6-phosphate",
+        "formula": "C6H11O9P",
+        "compartment": "Cytoplasm",
+        "crossref": [
+          "CHEBI:16084",
+          "CHEBI:12352",
+          "CHEBI:57634",
+          "CHEBI:22768",
+          "CHEBI:10375",
+          "CHEBI:42378"
+        ],
+        "weight": "No weight",
+        "color": "#FFA500",
+        "fontSize": 8,
+        "type": "metabolite"
+      },
+      "width": 30,
+      "height": 30,
+      "selected": false,
+      "positionAbsolute": {
+        "x": 0,
+        "y": 210
+      },
+      "dragging": false
+    },
+    {
+      "id": "fdp_c",
+      "temp_id": "Glycolysis/Gluconeogenesis__fdp_c",
+      "type": "custom",
+      "position": {
+        "x": 255,
+        "y": 210
+      },
+      "data": {
+        "abbreviation": "fdp_c",
+        "info": "D-Fructose 1,6-bisphosphate",
+        "formula": "C6H10O12P2",
+        "compartment": "Cytoplasm",
+        "crossref": [
+          "CHEBI:37736",
+          "CHEBI:49299"
+        ],
+        "weight": "No weight",
+        "color": "#FFA500",
+        "fontSize": 8,
+        "type": "metabolite"
+      },
+      "width": 30,
+      "height": 30,
+      "selected": false,
+      "positionAbsolute": {
+        "x": 255,
+        "y": 210
+      },
+      "dragging": false
+    },
+    {
+      "id": "PGI",
+      "temp_id": "Glycolysis/Gluconeogenesis__PGI",
+      "type": "custom",
+      "position": {
+        "x": -150,
+        "y": 210
+      },
+      "data": {
+        "abbreviation": "PGI",
+        "info": "Glucose-6-phosphate isomerase",
+        "flux": 4.86086114649681,
+        "subsystem": "Glycolysis/Gluconeogenesis",
+        "lower_bound": -1000,
+        "upper_bound": 1000,
+        "color": "rgb(18, 169, 249)",
+        "fontSize": 8,
+        "size": 48.54393830924268,
+        "gene": [
+          "b4025"
+        ],
+        "type": "reaction",
+        "BIGG_crossref": [
+          "PGI"
+        ],
+        "KEGG_crossref": [],
+        "EC_crossref": [
+          "5.3.1.9"
+        ],
+        "stoichiometry": {
+          "f6p_c": 1,
+          "g6p_c": -1
+        }
+      },
+      "width": 80,
+      "height": 40,
+      "selected": false,
+      "positionAbsolute": {
+        "x": -150,
+        "y": 210
+      },
+      "dragging": false
+    },
+    {
+      "id": "g6p_c",
+      "temp_id": "Glycolysis/Gluconeogenesis__g6p_c",
+      "type": "custom",
+      "position": {
+        "x": -270,
+        "y": 210
+      },
+      "data": {
+        "abbreviation": "g6p_c",
+        "info": "D-Glucose 6-phosphate",
+        "formula": "C6H11O9P",
+        "compartment": "Cytoplasm",
+        "crossref": [
+          "CHEBI:61548",
+          "CHEBI:14314",
+          "CHEBI:4170"
+        ],
+        "weight": "No weight",
+        "color": "#FFA500",
+        "fontSize": 8,
+        "type": "metabolite"
+      },
+      "width": 30,
+      "height": 30,
+      "selected": false,
+      "positionAbsolute": {
+        "x": -270,
+        "y": 210
+      },
+      "dragging": false
+    },
+    {
+      "id": "PGK",
+      "temp_id": "Glycolysis/Gluconeogenesis__PGK",
+      "type": "custom",
+      "position": {
+        "x": 930,
+        "y": 90
+      },
+      "data": {
+        "abbreviation": "PGK",
+        "info": "Phosphoglycerate kinase",
+        "flux": -16.0235261431676,
+        "subsystem": "Glycolysis/Gluconeogenesis",
+        "lower_bound": -1000,
+        "upper_bound": 1000,
+        "color": "rgb(13, 145, 234)",
+        "fontSize": 8,
+        "size": 11.835439289923553,
+        "gene": [
+          "b2926"
+        ],
+        "type": "reaction",
+        "BIGG_crossref": [
+          "PGK"
+        ],
+        "KEGG_crossref": [
+          "R01512"
+        ],
+        "EC_crossref": [
+          "2.7.2.3"
+        ],
+        "stoichiometry": {
+          "13dpg_c": 1,
+          "3pg_c": -1,
+          "adp_c": 1,
+          "atp_c": -1
+        }
+      },
+      "width": 80,
+      "height": 40,
+      "selected": false,
+      "positionAbsolute": {
+        "x": 930,
+        "y": 90
+      },
+      "dragging": false
+    },
+    {
+      "id": "3pg_c",
+      "temp_id": "Glycolysis/Gluconeogenesis__3pg_c",
+      "type": "custom",
+      "position": {
+        "x": 1095,
+        "y": 90
+      },
+      "data": {
+        "abbreviation": "3pg_c",
+        "info": "3-Phospho-D-glycerate",
+        "formula": "C3H4O7P",
+        "compartment": "Cytoplasm",
+        "crossref": [
+          "CHEBI:11879",
+          "CHEBI:11880",
+          "CHEBI:17794",
+          "CHEBI:21029",
+          "CHEBI:1657",
+          "CHEBI:58272",
+          "CHEBI:12987"
+        ],
+        "weight": "No weight",
+        "color": "#FFA500",
+        "fontSize": 8,
+        "type": "metabolite"
+      },
+      "width": 30,
+      "height": 30,
+      "selected": false,
+      "positionAbsolute": {
+        "x": 1095,
+        "y": 90
+      },
+      "dragging": false
+    },
+    {
+      "id": "13dpg_c",
+      "temp_id": "Glycolysis/Gluconeogenesis__13dpg_c",
+      "type": "custom",
+      "position": {
+        "x": 825,
+        "y": 90
+      },
+      "data": {
+        "abbreviation": "13dpg_c",
+        "info": "3-Phospho-D-glyceroyl phosphate",
+        "formula": "C3H4O10P2",
+        "compartment": "Cytoplasm",
+        "crossref": [
+          "CHEBI:57604",
+          "CHEBI:20189",
+          "CHEBI:11881",
+          "CHEBI:16001",
+          "CHEBI:1658"
+        ],
+        "weight": "No weight",
+        "color": "#FFA500",
+        "fontSize": 8,
+        "type": "metabolite"
+      },
+      "width": 30,
+      "height": 30,
+      "selected": false,
+      "positionAbsolute": {
+        "x": 825,
+        "y": 90
+      },
+      "dragging": false
+    },
+    {
+      "id": "PGM",
+      "temp_id": "Glycolysis/Gluconeogenesis__PGM",
+      "type": "custom",
+      "position": {
+        "x": 1215,
+        "y": 90
+      },
+      "data": {
+        "abbreviation": "PGM",
+        "info": "Phosphoglycerate mutase",
+        "flux": -14.7161395687428,
+        "subsystem": "Glycolysis/Gluconeogenesis",
+        "lower_bound": -1000,
+        "upper_bound": 1000,
+        "color": "rgb(14, 148, 236)",
+        "fontSize": 8,
+        "size": 14.133433390468454,
+        "gene": [
+          "b4395",
+          "b3612",
+          "b0755"
+        ],
+        "type": "reaction",
+        "BIGG_crossref": [
+          "PGM"
+        ],
+        "KEGG_crossref": [
+          "R01518"
+        ],
+        "EC_crossref": [
+          "5.4.2.1",
+          "5.4.2.11",
+          "5.4.2.12"
+        ],
+        "stoichiometry": {
+          "2pg_c": -1,
+          "3pg_c": 1
+        }
+      },
+      "width": 80,
+      "height": 40,
+      "selected": false,
+      "positionAbsolute": {
+        "x": 1215,
+        "y": 90
+      },
+      "dragging": false
+    },
+    {
+      "id": "2pg_c",
+      "temp_id": "Glycolysis/Gluconeogenesis__2pg_c",
+      "type": "custom",
+      "position": {
+        "x": 1410,
+        "y": 90
+      },
+      "data": {
+        "abbreviation": "2pg_c",
+        "info": "D-Glycerate 2-phosphate",
+        "formula": "C3H4O7P",
+        "compartment": "Cytoplasm",
+        "crossref": [
+          "CHEBI:39868",
+          "CHEBI:21028",
+          "CHEBI:58289",
+          "CHEBI:24344",
+          "CHEBI:12986",
+          "CHEBI:17835",
+          "CHEBI:11651",
+          "CHEBI:1267",
+          "CHEBI:88350"
+        ],
+        "weight": "No weight",
+        "color": "#FFA500",
+        "fontSize": 8,
+        "type": "metabolite"
+      },
+      "width": 30,
+      "height": 30,
+      "selected": false,
+      "positionAbsolute": {
+        "x": 1410,
+        "y": 90
+      },
+      "dragging": false
+    },
+    {
+      "id": "PPS",
+      "temp_id": "Glycolysis/Gluconeogenesis__PPS",
+      "type": "custom",
+      "position": {
+        "x": 1800,
+        "y": -45
+      },
+      "data": {
+        "abbreviation": "PPS",
+        "info": "Phosphoenolpyruvate synthase",
+        "flux": 0,
+        "subsystem": "Glycolysis/Gluconeogenesis",
+        "lower_bound": 0,
+        "upper_bound": 1000,
+        "color": "#e0e0e0",
+        "fontSize": 8,
+        "size": 40,
+        "gene": [
+          "b1702"
+        ],
+        "type": "reaction",
+        "BIGG_crossref": [
+          "PPS"
+        ],
+        "KEGG_crossref": [
+          "R00199"
+        ],
+        "EC_crossref": [
+          "2.7.9.2"
+        ],
+        "stoichiometry": {
+          "amp_c": 1,
+          "atp_c": -1,
+          "h2o_c": -1,
+          "h_c": 2,
+          "pep_c": 1,
+          "pi_c": 1,
+          "pyr_c": -1
+        }
+      },
+      "width": 80,
+      "height": 40,
+      "selected": false,
+      "positionAbsolute": {
+        "x": 1800,
+        "y": -45
+      },
+      "dragging": false
+    },
+    {
+      "id": "pyr_c",
+      "temp_id": "Glycolysis/Gluconeogenesis__pyr_c",
+      "type": "custom",
+      "position": {
+        "x": 1965,
+        "y": 75
+      },
+      "data": {
+        "abbreviation": "pyr_c",
+        "info": "Pyruvate",
+        "formula": "C3H3O3",
+        "compartment": "Cytoplasm",
+        "crossref": [
+          "CHEBI:26462",
+          "CHEBI:26466",
+          "CHEBI:8685",
+          "CHEBI:32816",
+          "CHEBI:45253",
+          "CHEBI:14987",
+          "CHEBI:15361"
+        ],
+        "weight": "No weight",
+        "color": "#FFA500",
+        "fontSize": 8,
+        "type": "metabolite"
+      },
+      "width": 30,
+      "height": 30,
+      "selected": false,
+      "positionAbsolute": {
+        "x": 1965,
+        "y": 75
+      },
+      "dragging": false
+    },
+    {
+      "id": "pep_c",
+      "temp_id": "Glycolysis/Gluconeogenesis__pep_c",
+      "type": "custom",
+      "position": {
+        "x": 1695,
+        "y": 90
+      },
+      "data": {
+        "abbreviation": "pep_c",
+        "info": "Phosphoenolpyruvate",
+        "formula": "C3H2O6P",
+        "compartment": "Cytoplasm",
+        "crossref": [
+          "CHEBI:18021",
+          "CHEBI:44894",
+          "CHEBI:26054",
+          "CHEBI:14812",
+          "CHEBI:26055",
+          "CHEBI:8147",
+          "CHEBI:58702",
+          "CHEBI:44897"
+        ],
+        "weight": "No weight",
+        "color": "#FFA500",
+        "fontSize": 8,
+        "type": "metabolite"
+      },
+      "width": 30,
+      "height": 30,
+      "selected": false,
+      "positionAbsolute": {
+        "x": 1695,
+        "y": 90
+      },
+      "dragging": false
+    },
+    {
+      "id": "PYK",
+      "temp_id": "Glycolysis/Gluconeogenesis__PYK",
+      "type": "custom",
+      "position": {
+        "x": 1815,
+        "y": 75
+      },
+      "data": {
+        "abbreviation": "PYK",
+        "info": "Pyruvate kinase",
+        "flux": 1.75817744410677,
+        "subsystem": "Glycolysis/Gluconeogenesis",
+        "lower_bound": 0,
+        "upper_bound": 1000,
+        "color": "rgb(19, 176, 253)",
+        "fontSize": 8,
+        "size": 43.09034945998741,
+        "gene": [
+          "b1676",
+          "b1854"
+        ],
+        "type": "reaction",
+        "BIGG_crossref": [
+          "PYK"
+        ],
+        "KEGG_crossref": [
+          "R00200"
+        ],
+        "EC_crossref": [
+          "2.7.1.40"
+        ],
+        "stoichiometry": {
+          "adp_c": -1,
+          "atp_c": 1,
+          "h_c": -1,
+          "pep_c": -1,
+          "pyr_c": 1
+        }
+      },
+      "width": 80,
+      "height": 40,
+      "selected": false,
+      "positionAbsolute": {
+        "x": 1815,
+        "y": 75
+      },
+      "dragging": false
+    },
+    {
+      "id": "ENO",
+      "temp_id": "Glycolysis/Gluconeogenesis__ENO",
+      "type": "custom",
+      "position": {
+        "x": 1530,
+        "y": 90
+      },
+      "data": {
+        "abbreviation": "ENO",
+        "info": "Enolase",
+        "flux": 14.7161395687428,
+        "subsystem": "Glycolysis/Gluconeogenesis",
+        "lower_bound": -1000,
+        "upper_bound": 1000,
+        "color": "rgb(14, 148, 236)",
+        "fontSize": 8,
+        "size": 65.86656660953155,
+        "gene": [
+          "b2779"
+        ],
+        "type": "reaction",
+        "BIGG_crossref": [
+          "ENO"
+        ],
+        "KEGG_crossref": [
+          "R00658"
+        ],
+        "EC_crossref": [
+          "4.2.1.11"
+        ],
+        "stoichiometry": {
+          "2pg_c": -1,
+          "h2o_c": 1,
+          "pep_c": 1
+        }
+      },
+      "width": 80,
+      "height": 40,
+      "selected": false,
+      "positionAbsolute": {
+        "x": 1530,
+        "y": 90
+      },
+      "dragging": false
+    },
+    {
+      "id": "TPI",
+      "temp_id": "Glycolysis/Gluconeogenesis__TPI",
+      "type": "custom",
+      "position": {
+        "x": 690,
+        "y": 180
+      },
+      "data": {
+        "abbreviation": "TPI",
+        "info": "Triose-phosphate isomerase",
+        "flux": 7.47738196216028,
+        "subsystem": "Glycolysis/Gluconeogenesis",
+        "lower_bound": -1000,
+        "upper_bound": 1000,
+        "color": "rgb(17, 164, 245)",
+        "fontSize": 8,
+        "size": 53.14299838525192,
+        "gene": [
+          "b3919"
+        ],
+        "type": "reaction",
+        "BIGG_crossref": [
+          "TPI"
+        ],
+        "KEGG_crossref": [
+          "R01015"
+        ],
+        "EC_crossref": [
+          "5.3.1.1"
+        ],
+        "stoichiometry": {
+          "dhap_c": -1,
+          "g3p_c": 1
+        }
+      },
+      "width": 80,
+      "height": 40,
+      "selected": false,
+      "positionAbsolute": {
+        "x": 690,
+        "y": 180
+      },
+      "dragging": false
+    },
+    {
+      "id": "dhap_c",
+      "temp_id": "Glycolysis/Gluconeogenesis__dhap_c",
+      "type": "custom",
+      "position": {
+        "x": 585,
+        "y": 255
+      },
+      "data": {
+        "abbreviation": "dhap_c",
+        "info": "Dihydroxyacetone phosphate",
+        "formula": "C3H5O6P",
+        "compartment": "Cytoplasm",
+        "crossref": [
+          "CHEBI:14341",
+          "CHEBI:5454",
+          "CHEBI:16108",
+          "CHEBI:14342",
+          "CHEBI:24355",
+          "CHEBI:39571",
+          "CHEBI:57642"
+        ],
+        "weight": "No weight",
+        "color": "#FFA500",
+        "fontSize": 8,
+        "type": "metabolite"
+      },
+      "width": 30,
+      "height": 30,
+      "selected": false,
+      "positionAbsolute": {
+        "x": 585,
+        "y": 255
+      },
+      "dragging": false
+    },
+    {
+      "id": "g3p_c",
+      "temp_id": "Glycolysis/Gluconeogenesis__g3p_c",
+      "type": "custom",
+      "position": {
+        "x": 555,
+        "y": 105
+      },
+      "data": {
+        "abbreviation": "g3p_c",
+        "info": "Glyceraldehyde 3-phosphate",
+        "formula": "C3H5O6P",
+        "compartment": "Cytoplasm",
+        "crossref": [
+          "CHEBI:5446",
+          "CHEBI:14333",
+          "CHEBI:12984",
+          "CHEBI:181",
+          "CHEBI:17138",
+          "CHEBI:21026",
+          "CHEBI:12983",
+          "CHEBI:18324",
+          "CHEBI:58027",
+          "CHEBI:59776",
+          "CHEBI:29052"
+        ],
+        "weight": "No weight",
+        "color": "#FFA500",
+        "fontSize": 8,
+        "type": "metabolite"
+      },
+      "width": 30,
+      "height": 30,
+      "selected": false,
+      "positionAbsolute": {
+        "x": 555,
+        "y": 105
+      },
+      "dragging": false
+    },
+    {
+      "id": "FBA",
+      "temp_id": "Glycolysis/Gluconeogenesis__FBA",
+      "type": "custom",
+      "position": {
+        "x": 360,
+        "y": 195
+      },
+      "data": {
+        "abbreviation": "FBA",
+        "info": "Fructose-bisphosphate aldolase",
+        "flux": 7.47738196216028,
+        "subsystem": "Glycolysis/Gluconeogenesis",
+        "lower_bound": -1000,
+        "upper_bound": 1000,
+        "color": "rgb(17, 164, 245)",
+        "fontSize": 8,
+        "size": 53.14299838525192,
+        "gene": [
+          "b2925",
+          "b2097",
+          "b1773"
+        ],
+        "type": "reaction",
+        "BIGG_crossref": [
+          "FBA"
+        ],
+        "KEGG_crossref": [
+          "R01068"
+        ],
+        "EC_crossref": [
+          "4.1.2.13"
+        ],
+        "stoichiometry": {
+          "dhap_c": 1,
+          "fdp_c": -1,
+          "g3p_c": 1
+        }
+      },
+      "width": 80,
+      "height": 40,
+      "selected": false,
+      "positionAbsolute": {
+        "x": 360,
+        "y": 195
+      },
+      "dragging": false
+    },
+    {
+      "id": "FBP",
+      "temp_id": "Glycolysis/Gluconeogenesis__FBP",
+      "type": "custom",
+      "position": {
+        "x": -30,
+        "y": 330
+      },
+      "data": {
+        "abbreviation": "FBP",
+        "info": "Fructose-bisphosphatase",
+        "flux": 0,
+        "subsystem": "Glycolysis/Gluconeogenesis",
+        "lower_bound": 0,
+        "upper_bound": 1000,
+        "color": "#e0e0e0",
+        "fontSize": 8,
+        "size": 40,
+        "gene": [
+          "b4232",
+          "b3925"
+        ],
+        "type": "reaction",
+        "BIGG_crossref": [
+          "FBP"
+        ],
+        "KEGG_crossref": [],
+        "EC_crossref": [
+          "3.1.3.11"
+        ],
+        "stoichiometry": {
+          "f6p_c": 1,
+          "fdp_c": -1,
+          "h2o_c": -1,
+          "pi_c": 1
+        }
+      },
+      "width": 80,
+      "height": 40,
+      "selected": false,
+      "positionAbsolute": {
+        "x": -30,
+        "y": 330
+      },
+      "dragging": false
+    },
+    {
+      "id": "GAPD",
+      "temp_id": "Glycolysis/Gluconeogenesis__GAPD",
+      "type": "custom",
+      "position": {
+        "x": 675,
+        "y": 90
+      },
+      "data": {
+        "abbreviation": "GAPD",
+        "info": "Glyceraldehyde-3-phosphate dehydrogenase",
+        "flux": 16.0235261431676,
+        "subsystem": "Glycolysis/Gluconeogenesis",
+        "lower_bound": -1000,
+        "upper_bound": 1000,
+        "color": "rgb(13, 145, 234)",
+        "fontSize": 8,
+        "size": 68.16456071007644,
+        "gene": [
+          "b1779"
+        ],
+        "type": "reaction",
+        "BIGG_crossref": [
+          "GAPD"
+        ],
+        "KEGG_crossref": [
+          "R01061"
+        ],
+        "EC_crossref": [
+          "1.2.1.12",
+          "1.2.1.59"
+        ],
+        "stoichiometry": {
+          "13dpg_c": 1,
+          "g3p_c": -1,
+          "h_c": 1,
+          "nad_c": -1,
+          "nadh_c": 1,
+          "pi_c": -1
+        }
+      },
+      "width": 80,
+      "height": 40,
+      "selected": false,
+      "positionAbsolute": {
+        "x": 675,
+        "y": 90
+      },
+      "dragging": false
+    },
+    {
+      "id": "PDH",
+      "temp_id": "Glycolysis/Gluconeogenesis__PDH",
+      "type": "custom",
+      "position": {
+        "x": 2070,
+        "y": 75
+      },
+      "data": {
+        "abbreviation": "PDH",
+        "info": "Pyruvate dehydrogenase",
+        "flux": 9.28253259916661,
+        "subsystem": "Glycolysis/Gluconeogenesis",
+        "lower_bound": 0,
+        "upper_bound": 1000,
+        "color": "rgb(16, 160, 243)",
+        "fontSize": 8,
+        "size": 56.31591265222035,
+        "gene": [
+          "b0116",
+          "b0115",
+          "b0114"
+        ],
+        "type": "reaction",
+        "BIGG_crossref": [
+          "PDH"
+        ],
+        "KEGG_crossref": [
+          "R00209"
+        ],
+        "EC_crossref": [
+          "1.8.1.4",
+          "1.2.1.51",
+          "1.2.4.1",
+          "2.3.1.12"
+        ],
+        "stoichiometry": {
+          "accoa_c": 1,
+          "co2_c": 1,
+          "coa_c": -1,
+          "nad_c": -1,
+          "nadh_c": 1,
+          "pyr_c": -1
+        }
+      },
+      "width": 80,
+      "height": 40,
+      "selected": false,
+      "positionAbsolute": {
+        "x": 2070,
+        "y": 75
+      },
+      "dragging": false
+    },
+    {
+      "id": "accoa_c",
+      "temp_id": "Glycolysis/Gluconeogenesis__accoa_c",
+      "type": "custom",
+      "position": {
+        "x": 2235,
+        "y": 75
+      },
+      "data": {
+        "abbreviation": "accoa_c",
+        "info": "Acetyl-CoA",
+        "formula": "C23H34N7O17P3S",
+        "compartment": "Cytoplasm",
+        "crossref": [
+          "CHEBI:57288",
+          "CHEBI:22192",
+          "CHEBI:15351",
+          "CHEBI:13712",
+          "CHEBI:2408",
+          "CHEBI:40470"
+        ],
+        "weight": "No weight",
+        "color": "#FFA500",
+        "fontSize": 8,
+        "type": "metabolite"
+      },
+      "width": 30,
+      "height": 30,
+      "selected": false,
+      "positionAbsolute": {
+        "x": 2235,
+        "y": 75
+      },
+      "dragging": false
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge_1766997550564_4tcf",
+      "source_id": "Glycolysis/Gluconeogenesis__f6p_c",
+      "target_id": "Glycolysis/Gluconeogenesis__PFK",
+      "source": "f6p_c",
+      "target": "PFK",
+      "sourceHandle": "right",
+      "targetHandle": "left",
+      "type": "default",
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#222"
+      },
+      "style": {
+        "strokeWidth": 2,
+        "stroke": "#222"
+      }
+    },
+    {
+      "id": "edge_1766997550564_zl7g",
+      "source_id": "Glycolysis/Gluconeogenesis__PFK",
+      "target_id": "Glycolysis/Gluconeogenesis__fdp_c",
+      "source": "PFK",
+      "target": "fdp_c",
+      "sourceHandle": "right",
+      "targetHandle": "left",
+      "type": "default",
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#222"
+      },
+      "style": {
+        "strokeWidth": 2,
+        "stroke": "#222"
+      }
+    },
+    {
+      "id": "edge_1766997550564_4yqi",
+      "source_id": "Glycolysis/Gluconeogenesis__g6p_c",
+      "target_id": "Glycolysis/Gluconeogenesis__PGI",
+      "source": "g6p_c",
+      "target": "PGI",
+      "sourceHandle": "right",
+      "targetHandle": "left",
+      "type": "default",
+      "markerStart": {
+        "type": "arrowclosed",
+        "color": "#222"
+      },
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#222"
+      },
+      "style": {
+        "strokeWidth": 2,
+        "stroke": "#222"
+      }
+    },
+    {
+      "id": "edge_1766997550564_38wt",
+      "source_id": "Glycolysis/Gluconeogenesis__PGI",
+      "target_id": "Glycolysis/Gluconeogenesis__f6p_c",
+      "source": "PGI",
+      "target": "f6p_c",
+      "sourceHandle": "right",
+      "targetHandle": "left",
+      "type": "default",
+      "markerStart": {
+        "type": "arrowclosed",
+        "color": "#222"
+      },
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#222"
+      },
+      "style": {
+        "strokeWidth": 2,
+        "stroke": "#222"
+      }
+    },
+    {
+      "id": "edge_1766997550564_23ew",
+      "source_id": "Glycolysis/Gluconeogenesis__3pg_c",
+      "target_id": "Glycolysis/Gluconeogenesis__PGK",
+      "source": "3pg_c",
+      "target": "PGK",
+      "sourceHandle": "left",
+      "targetHandle": "right",
+      "type": "default",
+      "markerStart": {
+        "type": "arrowclosed",
+        "color": "#222"
+      },
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#222"
+      },
+      "style": {
+        "strokeWidth": 2,
+        "stroke": "#222"
+      },
+      "selected": false
+    },
+    {
+      "id": "edge_1766997550564_b165",
+      "source_id": "Glycolysis/Gluconeogenesis__PGK",
+      "target_id": "Glycolysis/Gluconeogenesis__13dpg_c",
+      "source": "PGK",
+      "target": "13dpg_c",
+      "sourceHandle": "left",
+      "targetHandle": "right",
+      "type": "default",
+      "markerStart": {
+        "type": "arrowclosed",
+        "color": "#222"
+      },
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#222"
+      },
+      "style": {
+        "strokeWidth": 2,
+        "stroke": "#222"
+      },
+      "selected": false
+    },
+    {
+      "id": "edge_1766997550564_uohw",
+      "source_id": "Glycolysis/Gluconeogenesis__2pg_c",
+      "target_id": "Glycolysis/Gluconeogenesis__PGM",
+      "source": "2pg_c",
+      "target": "PGM",
+      "sourceHandle": "left",
+      "targetHandle": "right",
+      "type": "default",
+      "markerStart": {
+        "type": "arrowclosed",
+        "color": "#222"
+      },
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#222"
+      },
+      "style": {
+        "strokeWidth": 2,
+        "stroke": "#222"
+      },
+      "selected": false
+    },
+    {
+      "id": "edge_1766997550564_a5f3",
+      "source_id": "Glycolysis/Gluconeogenesis__PGM",
+      "target_id": "Glycolysis/Gluconeogenesis__3pg_c",
+      "source": "PGM",
+      "target": "3pg_c",
+      "sourceHandle": "left",
+      "targetHandle": "right",
+      "type": "default",
+      "markerStart": {
+        "type": "arrowclosed",
+        "color": "#222"
+      },
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#222"
+      },
+      "style": {
+        "strokeWidth": 2,
+        "stroke": "#222"
+      },
+      "selected": false
+    },
+    {
+      "id": "edge_1766997550564_u50r",
+      "source_id": "Glycolysis/Gluconeogenesis__pyr_c",
+      "target_id": "Glycolysis/Gluconeogenesis__PPS",
+      "source": "pyr_c",
+      "target": "PPS",
+      "sourceHandle": "left",
+      "targetHandle": "right",
+      "type": "default",
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#222"
+      },
+      "style": {
+        "strokeWidth": 2,
+        "stroke": "#222"
+      },
+      "selected": true
+    },
+    {
+      "id": "edge_1766997550564_8qh5",
+      "source_id": "Glycolysis/Gluconeogenesis__PPS",
+      "target_id": "Glycolysis/Gluconeogenesis__pep_c",
+      "source": "PPS",
+      "target": "pep_c",
+      "sourceHandle": "left",
+      "targetHandle": "right",
+      "type": "default",
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#222"
+      },
+      "style": {
+        "strokeWidth": 2,
+        "stroke": "#222"
+      },
+      "selected": false
+    },
+    {
+      "id": "edge_1766997550564_usld",
+      "source_id": "Glycolysis/Gluconeogenesis__pep_c",
+      "target_id": "Glycolysis/Gluconeogenesis__PYK",
+      "source": "pep_c",
+      "target": "PYK",
+      "sourceHandle": "right",
+      "targetHandle": "left",
+      "type": "default",
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#222"
+      },
+      "style": {
+        "strokeWidth": 2,
+        "stroke": "#222"
+      }
+    },
+    {
+      "id": "edge_1766997550564_zp4q",
+      "source_id": "Glycolysis/Gluconeogenesis__PYK",
+      "target_id": "Glycolysis/Gluconeogenesis__pyr_c",
+      "source": "PYK",
+      "target": "pyr_c",
+      "sourceHandle": "right",
+      "targetHandle": "left",
+      "type": "default",
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#222"
+      },
+      "style": {
+        "strokeWidth": 2,
+        "stroke": "#222"
+      }
+    },
+    {
+      "id": "edge_1766997550564_swjn",
+      "source_id": "Glycolysis/Gluconeogenesis__2pg_c",
+      "target_id": "Glycolysis/Gluconeogenesis__ENO",
+      "source": "2pg_c",
+      "target": "ENO",
+      "sourceHandle": "right",
+      "targetHandle": "left",
+      "type": "default",
+      "markerStart": {
+        "type": "arrowclosed",
+        "color": "#222"
+      },
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#222"
+      },
+      "style": {
+        "strokeWidth": 2,
+        "stroke": "#222"
+      }
+    },
+    {
+      "id": "edge_1766997550564_roi0",
+      "source_id": "Glycolysis/Gluconeogenesis__ENO",
+      "target_id": "Glycolysis/Gluconeogenesis__pep_c",
+      "source": "ENO",
+      "target": "pep_c",
+      "sourceHandle": "right",
+      "targetHandle": "left",
+      "type": "default",
+      "markerStart": {
+        "type": "arrowclosed",
+        "color": "#222"
+      },
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#222"
+      },
+      "style": {
+        "strokeWidth": 2,
+        "stroke": "#222"
+      }
+    },
+    {
+      "id": "edge_1766997550564_7tpg",
+      "source_id": "Glycolysis/Gluconeogenesis__dhap_c",
+      "target_id": "Glycolysis/Gluconeogenesis__TPI",
+      "source": "dhap_c",
+      "target": "TPI",
+      "sourceHandle": "right",
+      "targetHandle": "left",
+      "type": "default",
+      "markerStart": {
+        "type": "arrowclosed",
+        "color": "#222"
+      },
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#222"
+      },
+      "style": {
+        "strokeWidth": 2,
+        "stroke": "#222"
+      }
+    },
+    {
+      "id": "edge_1766997550564_3f5q",
+      "source_id": "Glycolysis/Gluconeogenesis__TPI",
+      "target_id": "Glycolysis/Gluconeogenesis__g3p_c",
+      "source": "TPI",
+      "target": "g3p_c",
+      "sourceHandle": "left",
+      "targetHandle": "right",
+      "type": "default",
+      "markerStart": {
+        "type": "arrowclosed",
+        "color": "#222"
+      },
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#222"
+      },
+      "style": {
+        "strokeWidth": 2,
+        "stroke": "#222"
+      },
+      "selected": false
+    },
+    {
+      "id": "edge_1766997550564_5w5p",
+      "source_id": "Glycolysis/Gluconeogenesis__fdp_c",
+      "target_id": "Glycolysis/Gluconeogenesis__FBA",
+      "source": "fdp_c",
+      "target": "FBA",
+      "sourceHandle": "right",
+      "targetHandle": "left",
+      "type": "default",
+      "markerStart": {
+        "type": "arrowclosed",
+        "color": "#222"
+      },
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#222"
+      },
+      "style": {
+        "strokeWidth": 2,
+        "stroke": "#222"
+      }
+    },
+    {
+      "id": "edge_1766997550564_no0c",
+      "source_id": "Glycolysis/Gluconeogenesis__FBA",
+      "target_id": "Glycolysis/Gluconeogenesis__g3p_c",
+      "source": "FBA",
+      "target": "g3p_c",
+      "sourceHandle": "right",
+      "targetHandle": "left",
+      "type": "default",
+      "markerStart": {
+        "type": "arrowclosed",
+        "color": "#222"
+      },
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#222"
+      },
+      "style": {
+        "strokeWidth": 2,
+        "stroke": "#222"
+      }
+    },
+    {
+      "id": "edge_1766997550564_h983",
+      "source_id": "Glycolysis/Gluconeogenesis__FBA",
+      "target_id": "Glycolysis/Gluconeogenesis__dhap_c",
+      "source": "FBA",
+      "target": "dhap_c",
+      "sourceHandle": "right",
+      "targetHandle": "left",
+      "type": "default",
+      "markerStart": {
+        "type": "arrowclosed",
+        "color": "#222"
+      },
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#222"
+      },
+      "style": {
+        "strokeWidth": 2,
+        "stroke": "#222"
+      }
+    },
+    {
+      "id": "edge_1766997550564_kl8z",
+      "source_id": "Glycolysis/Gluconeogenesis__fdp_c",
+      "target_id": "Glycolysis/Gluconeogenesis__FBP",
+      "source": "fdp_c",
+      "target": "FBP",
+      "sourceHandle": "bottom",
+      "targetHandle": "right",
+      "type": "default",
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#222"
+      },
+      "style": {
+        "strokeWidth": 2,
+        "stroke": "#222"
+      },
+      "selected": false
+    },
+    {
+      "id": "edge_1766997550564_0j8m",
+      "source_id": "Glycolysis/Gluconeogenesis__FBP",
+      "target_id": "Glycolysis/Gluconeogenesis__f6p_c",
+      "source": "FBP",
+      "target": "f6p_c",
+      "sourceHandle": "top",
+      "targetHandle": "bottom",
+      "type": "default",
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#222"
+      },
+      "style": {
+        "strokeWidth": 2,
+        "stroke": "#222"
+      },
+      "selected": false
+    },
+    {
+      "id": "edge_1766997550564_llqu",
+      "source_id": "Glycolysis/Gluconeogenesis__g3p_c",
+      "target_id": "Glycolysis/Gluconeogenesis__GAPD",
+      "source": "g3p_c",
+      "target": "GAPD",
+      "sourceHandle": "right",
+      "targetHandle": "left",
+      "type": "default",
+      "markerStart": {
+        "type": "arrowclosed",
+        "color": "#222"
+      },
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#222"
+      },
+      "style": {
+        "strokeWidth": 2,
+        "stroke": "#222"
+      }
+    },
+    {
+      "id": "edge_1766997550564_qlsh",
+      "source_id": "Glycolysis/Gluconeogenesis__GAPD",
+      "target_id": "Glycolysis/Gluconeogenesis__13dpg_c",
+      "source": "GAPD",
+      "target": "13dpg_c",
+      "sourceHandle": "right",
+      "targetHandle": "left",
+      "type": "default",
+      "markerStart": {
+        "type": "arrowclosed",
+        "color": "#222"
+      },
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#222"
+      },
+      "style": {
+        "strokeWidth": 2,
+        "stroke": "#222"
+      }
+    },
+    {
+      "id": "edge_1766997550564_ch71",
+      "source_id": "Glycolysis/Gluconeogenesis__pyr_c",
+      "target_id": "Glycolysis/Gluconeogenesis__PDH",
+      "source": "pyr_c",
+      "target": "PDH",
+      "sourceHandle": "right",
+      "targetHandle": "left",
+      "type": "default",
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#222"
+      },
+      "style": {
+        "strokeWidth": 2,
+        "stroke": "#222"
+      }
+    },
+    {
+      "id": "edge_1766997550564_wsmg",
+      "source_id": "Glycolysis/Gluconeogenesis__PDH",
+      "target_id": "Glycolysis/Gluconeogenesis__accoa_c",
+      "source": "PDH",
+      "target": "accoa_c",
+      "sourceHandle": "right",
+      "targetHandle": "left",
+      "type": "default",
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#222"
+      },
+      "style": {
+        "strokeWidth": 2,
+        "stroke": "#222"
+      }
+    }
+  ],
+  "currency_edges": [
+    [
+      "PFK",
+      "h_c"
+    ],
+    [
+      "PFK",
+      "adp_c"
+    ],
+    [
+      "atp_c",
+      "PFK"
+    ],
+    [
+      "PGK",
+      "adp_c"
+    ],
+    [
+      "atp_c",
+      "PGK"
+    ],
+    [
+      "h2o_c",
+      "PPS"
+    ],
+    [
+      "PPS",
+      "h_c"
+    ],
+    [
+      "PPS",
+      "pi_c"
+    ],
+    [
+      "atp_c",
+      "PPS"
+    ],
+    [
+      "PPS",
+      "amp_c"
+    ],
+    [
+      "h_c",
+      "PYK"
+    ],
+    [
+      "adp_c",
+      "PYK"
+    ],
+    [
+      "PYK",
+      "atp_c"
+    ],
+    [
+      "ENO",
+      "h2o_c"
+    ],
+    [
+      "h2o_c",
+      "FBP"
+    ],
+    [
+      "FBP",
+      "pi_c"
+    ],
+    [
+      "GAPD",
+      "h_c"
+    ],
+    [
+      "pi_c",
+      "GAPD"
+    ],
+    [
+      "nad_c",
+      "GAPD"
+    ],
+    [
+      "GAPD",
+      "nadh_c"
+    ],
+    [
+      "PDH",
+      "co2_c"
+    ],
+    [
+      "coa_c",
+      "PDH"
+    ],
+    [
+      "nad_c",
+      "PDH"
+    ],
+    [
+      "PDH",
+      "nadh_c"
+    ]
+  ]
+}

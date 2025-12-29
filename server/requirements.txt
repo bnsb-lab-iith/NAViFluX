@@ -1,0 +1,11 @@
+Flask==3.1.2
+cobra==0.30.0
+Flask-Caching==2.3.1
+flask-cors==6.0.2
+numpy==2.3.5
+pyarrow==22.0.0
+fastparquet==2024.11.0
+networkx==3.6.1
+gseapy==1.1.11
+gunicorn==23.0.0
+pandas==2.3.3
