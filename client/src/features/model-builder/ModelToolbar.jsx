@@ -168,7 +168,7 @@ function ModelToolbar({
                             className="flex w-full items-center gap-2 px-4 py-2.5 text-sm text-gray-700 transition-colors hover:bg-indigo-50 hover:text-indigo-600 disabled:cursor-not-allowed disabled:opacity-50"
                         >
                             <Download className="h-3 w-3" />
-                            NAViFlux file
+                            NAViFluX file
                         </button>
                         {toolButtons.map((btn) => (
                             <>

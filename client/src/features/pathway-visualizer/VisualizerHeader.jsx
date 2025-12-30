@@ -12,7 +12,7 @@ function VisualizerHeader() {
     return (
         <header className="flex w-full items-center justify-between border-b border-stone-300 bg-white px-6 pb-3 shadow-sm">
             {/* Logo */}
-            <img src="/analysis_icon.png" alt="NAViFlux Icon" className="h-14 w-auto object-contain cursor-pointer" onClick={() => navigate('/')}/>
+            <img src="/analysis_icon.png" alt="NAViFluX Icon" className="h-14 w-auto object-contain cursor-pointer" onClick={() => navigate('/')}/>
 
             {/* Desktop Nav */}
             <div className="hidden items-center gap-6 text-stone-600 lg:flex">

@@ -2515,7 +2515,7 @@ function ModelBuilder() {
             />
 
             <footer className="bg-stone-200 py-6 text-center text-sm text-stone-600">
-                © 2025 NAViFlux, Biological Networks and Systems Biology Lab, IIT Hyderabad
+                © 2025 NAViFluX, Biological Networks and Systems Biology Lab, IIT Hyderabad
                 — All rights reserved.
             </footer>
         </div>

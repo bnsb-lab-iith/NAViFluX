@@ -630,7 +630,7 @@ function VizToolBar({
                 ) : (
                     <div>
                         Use the upload option to upload a COBRA model or a
-                        NAViFlux Compatible File
+                        NAViFluX Compatible File
                     </div>
                 )}
             </div>

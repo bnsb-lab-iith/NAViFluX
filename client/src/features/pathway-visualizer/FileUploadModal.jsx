@@ -159,7 +159,7 @@ function FileUploadModal({ isOpenFileModal, setIsOpenFileModal }) {
                             </button>
                         </div>
                         <p className="my-1 text-sm text-gray-600">
-                            Upload a COBRA model (.mat, .XML, .json) or NAViFlux JSON
+                            Upload a COBRA model (.mat, .XML, .json) or NAViFluX JSON
                             file (s). Once uploaded, we will analyse your model
                             and provide pathway wise visualisations
                         </p>
@@ -184,7 +184,7 @@ function FileUploadModal({ isOpenFileModal, setIsOpenFileModal }) {
                                         checked={upload_type === 'batch'}
                                         onChange={() => setUploadType('batch')}
                                     />
-                                    NAViFlux JSON Upload
+                                    NAViFluX JSON Upload
                                 </label>
                             </div>
 
@@ -194,7 +194,7 @@ function FileUploadModal({ isOpenFileModal, setIsOpenFileModal }) {
                                         <Upload className="h-3 w-3" />
                                         {upload_type === 'single'
                                             ? 'Upload Model'
-                                            : 'Upload Multiple NAViFlux files'}
+                                            : 'Upload Multiple NAViFluX files'}
                                     </CardTitle>
                                 </CardHeader>
 
@@ -262,7 +262,7 @@ function FileUploadModal({ isOpenFileModal, setIsOpenFileModal }) {
                                                     handleBatchUpload()
                                                 }}
                                             >
-                                                Upload NAViFlux file(s)
+                                                Upload NAViFluX file(s)
                                             </Button>
                                         </>
                                     )}

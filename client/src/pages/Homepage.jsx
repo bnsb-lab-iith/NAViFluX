@@ -15,7 +15,7 @@ export default function Homepage() {
                 <div className="flex items-center">
                     <img
                         src="/analysis_icon.png"
-                        alt="NAViFlux Icon"
+                        alt="NAViFluX Icon"
                         className="h-14 w-auto cursor-pointer"
                         onClick={() => navigate('/')}
                     />
@@ -64,13 +64,13 @@ export default function Homepage() {
                     transition={{ duration: 0.7 }}
                     className="max-w-4xl text-5xl font-extrabold leading-tight text-stone-800 md:text-6xl"
                 >
-                    <span className="text-[#003399]">NAViFlux</span>
+                    <span className="text-[#003399]">NAViFluX</span>
                     <span className="font-bold text-stone-700">
                         : Metabolic <span className="text-[#003399]">N</span>
                         etwork <span className="text-[#003399]">A</span>nalysis
                         and <span className="text-[#003399]">Vi</span>
                         sualization of{' '}
-                        <span className="text-[#003399]">Flux</span>
+                        <span className="text-[#003399]">FluX</span>
                     </span>
                 </motion.h1>
 
@@ -110,7 +110,7 @@ export default function Homepage() {
                         className="space-y-4"
                     >
                         <h2 className="inline-flex items-center gap-2 border-b border-indigo-300 pb-2 text-3xl font-bold text-[#003399]">
-                            <ChartNoAxesCombined /> What is NAViFlux?
+                            <ChartNoAxesCombined /> What is NAViFluX?
                         </h2>
 
                         <ul className="list-inside list-disc space-y-4 leading-relaxed text-stone-700">
@@ -144,7 +144,7 @@ export default function Homepage() {
                         className="space-y-4"
                     >
                         <h2 className="inline-flex items-center gap-2 border-b border-indigo-300 pb-2 text-3xl font-bold text-[#003399]">
-                            <Database /> Why use NAViFlux?
+                            <Database /> Why use NAViFluX?
                         </h2>
 
                         <ul className="list-inside list-disc space-y-4 leading-relaxed text-stone-700">
@@ -216,7 +216,7 @@ export default function Homepage() {
             {/* Footer */}
             {/* ----------------------------------------------------- */}
             <footer className="border-t border-stone-200 bg-stone-100 py-6 text-center text-sm text-stone-600">
-                © 2025 NAViFlux — Biological Networks & Systems Biology Lab,
+                © 2025 NAViFluX — Biological Networks & Systems Biology Lab,
                 IIT Hyderabad
             </footer>
         </div>

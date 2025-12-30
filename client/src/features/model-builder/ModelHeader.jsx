@@ -10,7 +10,7 @@ function ModelHeader() {
     const isActive = (path) => location.pathname === path
     return (
         <header className="flex w-full items-center justify-between border-b border-stone-300 bg-white px-8 pb-3 shadow-sm">
-            <img src="/analysis_icon.png" alt="NAViFlux Icon" className="h-14 w-auto object-contain cursor-pointer" onClick={() => navigate('/')}/>
+            <img src="/analysis_icon.png" alt="NAViFluX Icon" className="h-14 w-auto object-contain cursor-pointer" onClick={() => navigate('/')}/>
             <div className="hidden items-center gap-6 text-stone-600 lg:flex">
                 <h2
                     onClick={() => navigate('/pathway-visualizer')}

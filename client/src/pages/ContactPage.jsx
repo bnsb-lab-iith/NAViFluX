@@ -8,7 +8,7 @@ function ContactPage() {
         <div className="min-h-screen font-sans text-stone-800">
             {/* HEADER */}
             <header className="flex w-full items-center justify-between border-b border-stone-300 bg-white px-10 pb-3 shadow-sm">
-                <img src="/analysis_icon.png" alt="NAViFlux Icon" className="h-14 w-auto object-contain cursor-pointer" onClick={() => navigate('/')}/>
+                <img src="/analysis_icon.png" alt="NAViFluX Icon" className="h-14 w-auto object-contain cursor-pointer" onClick={() => navigate('/')}/>
                 <div className="flex items-center gap-6 text-stone-600">
                     <h2
               
@@ -41,7 +41,7 @@ function ContactPage() {
                 </h2>
                 <p className="max-w-2xl text-lg leading-relaxed text-stone-700">
                     Have questions or facing any issues? Reach out
-                    to the <strong className="text-[#003399]">NAViFlux</strong>{' '}
+                    to the <strong className="text-[#003399]">NAViFluX</strong>{' '}
                     team at IIT Hyderabad. We’d love to hear from you!
                 </p>
 
@@ -106,7 +106,7 @@ function ContactPage() {
 
             {/* FOOTER */}
             <footer className="bg-stone-200 py-6 text-center text-sm text-stone-600">
-                © 2025 NAViFlux, Biological Networks and Systems Biology Lab, IIT Hyderabad
+                © 2025 NAViFluX, Biological Networks and Systems Biology Lab, IIT Hyderabad
                 — All rights reserved.
             </footer>
         </div>

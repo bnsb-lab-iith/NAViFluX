@@ -33,7 +33,7 @@ import ORAmodal from '../features/pathway-visualizer/ORAmodal'
 const toolButtons = [
     {
         name: 'exportToolFile',
-        label: 'NAViFlux File',
+        label: 'NAViFluX File',
         icon: Download,
         variant: 'secondary',
     },
@@ -2213,7 +2213,7 @@ function PathwayViz() {
                 setIsOpenFluxWeightModal={setIsOpenFluxWeightModal}
             />
             <footer className="bg-stone-200 py-6 text-center text-sm text-stone-600">
-                © 2025 NAViFlux, Biological Networks and Systems Biology Lab,
+                © 2025 NAViFluX, Biological Networks and Systems Biology Lab,
                 IIT Hyderabad — All rights reserved.
             </footer>
         </div>
