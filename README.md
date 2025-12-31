@@ -32,7 +32,7 @@ To know more about NAViFluX and it's use cases we highly recommend you to check 
 
 ---
 
-## ⚙️ Installation Guide
+## Installation Guide
 
 To run the application locally, please ensure the required dependencies are installed on your system. Follow the steps below based on your operating system.
 
@@ -162,7 +162,7 @@ pip3 --version
 
 ---
 
-## 🚀 Download and Run NAViFluX
+## Download and Run NAViFluX
 
 ### Step 1: Get the Source Code
 
@@ -200,7 +200,7 @@ Download the repository as a ZIP file and extract it.
 ```
 
 
-## 🛠 If the Scripts Don’t Work (Manual Setup)
+## If the Scripts Don’t Work (Manual Setup)
 
 You can manually start the frontend and backend as follows.
 
@@ -243,9 +243,9 @@ pip install -r requirements.txt
 flask run
 ```
 
----
 
-## 📄 License
+
+## License
 
 This project is licensed under the **MIT License**. See the `LICENSE` file for details.
 
