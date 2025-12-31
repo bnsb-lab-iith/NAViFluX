@@ -1207,7 +1207,7 @@ function ModelBuilder() {
     return (
         <div className="min-h-screen bg-stone-100 font-sans text-stone-800">
             <ModelHeader />
-            <main className="mb-2 flex h-[calc(100vh-80px)] flex-col bg-stone-100">
+            <main className="mb-2 flex h-[calc(100vh-80px)] flex-col bg-stone">
                 <ModelToolbar
                     selectedIds={selectedIds}
                     downloadGeneReactionMatrix={downloadGeneReactionMatrix}
@@ -1325,7 +1325,7 @@ function ModelBuilder() {
                                 </div>
 
                                 <div
-                                    className={`rounded-lg border-2 bg-stone-100 shadow-sm transition-colors ${
+                                    className={`rounded-lg border-2 bg-white shadow-sm transition-colors ${
                                         mergeMode
                                             ? selectedIds.includes(canvas.id)
                                                 ? 'border-green-500'
