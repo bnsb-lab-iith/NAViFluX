@@ -89,15 +89,23 @@ function ModelBuilder() {
     const [isOpenDBModal, setIsOpenDBModal] = useState(true)
 
     const downloadGeneReactionMatrix = () => {
-   
         const gene_rxn_obj = {}
-        Object.entries(modelData).map(([path, enzymes]) => {
-            Object.entries(enzymes).map(([enz, enzobj]) => {
-                gene_rxn_obj[enz] = enzobj.genes
+
+        Object.entries(modelData || {}).forEach(([path, enzymes]) => {
+            Object.entries(enzymes || {}).forEach(([enz, enzobj]) => {
+                if (Array.isArray(enzobj?.genes)) {
+                    gene_rxn_obj[enz] = enzobj.genes
+                }
             })
         })
-  
+
         const genes = [...new Set(Object.values(gene_rxn_obj).flat())]
+
+        
+        if (genes.length === 0 || Object.keys(gene_rxn_obj).length === 0) {
+            toast('No gene–reaction data available to export.')
+            return
+        }
 
         // build matrix
         const matrix = genes.map((gene) => {
@@ -108,16 +116,25 @@ function ModelBuilder() {
             return row
         })
 
+       
+        if (matrix.length === 0) {
+            console.warn('Generated matrix is empty.')
+            return
+        }
+
         const headers = Object.keys(matrix[0])
         const rows = []
-        rows.push(headers.join(',')) // header row
+        rows.push(headers.join(','))
         matrix.forEach((row) => {
-            rows.push(headers.map((h) => row[h]).join(','))
+            rows.push(headers.map((h) => row[h] ?? 0).join(','))
         })
 
         const csvContent = rows.join('\n')
-  
-        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
+
+        const blob = new Blob([csvContent], {
+            type: 'text/csv;charset=utf-8;',
+        })
+
         const url = URL.createObjectURL(blob)
         const link = document.createElement('a')
         link.href = url
@@ -141,7 +158,6 @@ function ModelBuilder() {
     const [query, setQuery] = useState('')
 
     const filteredAddFullReactionData = useMemo(() => {
-   
         const keyword = AFRkeyword.toLowerCase()
         const searchTerms = keyword
             .split(/[, ]+/)
@@ -197,9 +213,9 @@ function ModelBuilder() {
                 }),
             }
         )
- 
+
         const returned_data = await res.json()
-    
+
         if (returned_data.status === 'error')
             throw new Error(returned_data.message)
 
@@ -216,7 +232,6 @@ function ModelBuilder() {
             data.subsystem = subsystem
             reactionList[enz] = data
         })
- 
 
         const { nodes, edges } = createNodeAndEdges(
             reactionList,
@@ -224,7 +239,6 @@ function ModelBuilder() {
             edgeHandleCache,
             modelData
         )
-
 
         const editorRef = targetCanvas.ref?.current
         if (!editorRef) return alert('Editor not ready')
@@ -254,8 +268,6 @@ function ModelBuilder() {
             }
             updatedModelData[subsystem][enzyme] = reaction
         })
-
-
 
         setModelData((prev) => {
             const newModelData = { ...prev }
@@ -368,7 +380,6 @@ function ModelBuilder() {
     }, [gapFillingFullData, gapFillingKeyword])
 
     function handleAddMissingReaction(id) {
-
         const data = gapFillingFullData[selectedEnzyme]
         const lower_bound =
             gapFillBounds[selectedEnzyme].lower === ''
@@ -391,7 +402,7 @@ function ModelBuilder() {
             nodePositionCache,
             edgeHandleCache
         )
-     
+
         const targetCanvas = canvases.find((c) => c.id === id)
         if (!targetCanvas) return alert('Select a canvas')
 
@@ -457,7 +468,6 @@ function ModelBuilder() {
     }
 
     function GapFill(selectedNodes) {
-     
         setIsOpenGapFillModal(true)
         setGapFillNodesForBackend(selectedNodes)
         setGapFillingFullData(null)
@@ -472,7 +482,7 @@ function ModelBuilder() {
         setGapFillingMode(true)
         setGapFillingNodes([])
         setGapFillNodesForBackend([])
-       
+
         toast('Select two metabolites (orange nodes) for gap filling')
     }
 
@@ -514,7 +524,7 @@ function ModelBuilder() {
                 newPathObj.genes[enzyme] = enzObj.genes
             })
         })
-     
+
         try {
             setIsDownloadingEdgeList(true)
 
@@ -536,7 +546,7 @@ function ModelBuilder() {
             }
 
             const { task_id } = await submitRes.json()
-       
+
             let timeoutId = null
 
             const pollTask = async () => {
@@ -554,7 +564,6 @@ function ModelBuilder() {
                     setIsDownloadingEdgeList(true)
                     timeoutId = setTimeout(pollTask, 10)
                 } else if (state === 'SUCCESS') {
-                
                     const {
                         reaction_network,
                         metabolite_network,
@@ -698,13 +707,13 @@ function ModelBuilder() {
             data.genes = genes
             reactionList[enz] = data
         })
-       
+
         const { nodes, edges } = createNodeAndEdges(
             reactionList,
             nodePositionCache,
             edgeHandleCache
         )
-     
+
         const targetCanvas = canvases.find((c) => c.id === id)
         if (!targetCanvas) return alert('Select a canvas')
 
@@ -737,7 +746,6 @@ function ModelBuilder() {
             updatedModelData[subsystem][enzyme] = reaction
         })
 
-        
         setModelData((prev) => {
             const newModelData = { ...prev }
 
@@ -803,7 +811,6 @@ function ModelBuilder() {
             }
 
             const nonEmpty = prev.filter(isNonEmpty)
-       
 
             if (count < nonEmpty.length) {
                 toast.error(
@@ -846,11 +853,9 @@ function ModelBuilder() {
         const target = canvases.find((c) => c.id === focusedId)
         if (!target) return alert('Select a canvas first')
         target.ref.current?.addNode()
-   
+
         const nodes = target?.ref.current?.getCurrentNodes()
         const edges = target?.ref.current?.getCurrentEdges()
-
-     
     }
 
     const addEdgeToFocused = () => {
@@ -918,7 +923,7 @@ function ModelBuilder() {
                 edges: JSON.parse(JSON.stringify(currentEdges)),
             }
         })
-    
+
         setUndoBackup(backup)
     }
 
@@ -1110,7 +1115,6 @@ function ModelBuilder() {
             const pathObj = modelData[path] // from the old one
             const newPathObj = finalModelData[path] // new path obj
             Object.entries(pathObj).map(([enzyme, enzObj]) => {
-              
                 newPathObj.edges.push(...enzObj.edges)
                 newPathObj.currency_edges.push(...enzObj.currency_edges)
                 const lb = enzObj.bounds.lower || -1000.0
@@ -1135,11 +1139,11 @@ function ModelBuilder() {
                 }
             })
         })
-  
+
         const reactionIds = nodes
             .filter((node) => node.data?.type === 'reaction')
             .map((node) => node.id)
-      
+
         let allCurrencyEdges = []
 
         for (const data of Object.values(finalModelData)) {
@@ -1217,9 +1221,7 @@ function ModelBuilder() {
                     modelData={modelData}
                     handleDownloadEdgeList={handleDownloadEdgeList}
                     isDownloadingEdgeList={isDownloadingEdgeList}
-                    exportSelectedToolFile={
-                        exportSelectedToolFile
-                    }
+                    exportSelectedToolFile={exportSelectedToolFile}
                     toolButtons={toolButtons}
                     visualizerRef={visualizerRef}
                     setIsOpenDownloadModal={setIsOpenDownloadModal}
@@ -1297,7 +1299,7 @@ function ModelBuilder() {
                                         <option value="default">
                                             Default Layout
                                         </option>
-                                        
+
                                         <option value="hierarchical-lr">
                                             Hierarchical LR
                                         </option>
@@ -1305,11 +1307,11 @@ function ModelBuilder() {
                                         <option value="hierarchical-bt">
                                             Hierarchical BT
                                         </option>
-                                        
+
                                         <option value="stress">
                                             Stress Layout
                                         </option>
-                                        
+
                                         <option value="neato">
                                             Neato Layout
                                         </option>
@@ -1378,7 +1380,6 @@ function ModelBuilder() {
                                             setIsOpenDownloadModal
                                         }
                                         onNodeSelectAction={(node) => {
-                                           
                                             if (node?.data?.color != 'orange') {
                                                 toast.error(
                                                     'Please select a metabolite (orange color node)'
@@ -1428,7 +1429,6 @@ function ModelBuilder() {
                             </h3>
                             <input
                                 onChange={(e) => {
-                                 
                                     setAFRkeyword(e.target.value)
                                 }}
                                 className="w-1/2 rounded-md border border-gray-300 bg-gray-100 p-2 text-sm transition-colors"
@@ -1742,7 +1742,7 @@ function ModelBuilder() {
                             onClick={() => {
                                 if (!focusedId)
                                     return toast.error('Please select a canvas')
-                                
+
                                 setStepAddFullReaction('select')
                                 handleSubmitNewEdges(focusedId)
                             }}
@@ -2451,7 +2451,7 @@ function ModelBuilder() {
                             onClick={() => {
                                 if (!focusedId)
                                     return toast.error('Please select a canvas')
-                               
+
                                 setStepSingleReaction('select')
                                 handleSubmitSingleReactionEdges(focusedId)
                             }}
@@ -2466,7 +2466,6 @@ function ModelBuilder() {
                     </div>
                 </section>
             )}
-            
 
             <AddFullReaction
                 isOpenAFRmodal={isOpenAFRmodal}
@@ -2515,8 +2514,8 @@ function ModelBuilder() {
             />
 
             <footer className="bg-stone-200 py-6 text-center text-sm text-stone-600">
-                © 2025 NAViFluX, Biological Networks and Systems Biology Lab, IIT Hyderabad
-                — All rights reserved.
+                © 2025 NAViFluX, Biological Networks and Systems Biology Lab,
+                IIT Hyderabad — All rights reserved.
             </footer>
         </div>
     )
