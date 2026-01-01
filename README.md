@@ -207,6 +207,8 @@ You can manually start the frontend and backend as follows.
 
 ### Start the Frontend
 
+Open your terminal and navigate to the source code root folder 
+
 ```bash
 cd client
 npm install
@@ -218,7 +220,10 @@ Open the displayed local URL in your browser.
 
 ### Start the Backend
 
+Open another terminal and again navigate to the source code root folder
+
 ```bash
+cd server
 python -m venv .venv
 ```
 
