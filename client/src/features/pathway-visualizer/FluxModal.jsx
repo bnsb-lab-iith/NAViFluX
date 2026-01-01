@@ -26,11 +26,10 @@ function FluxModal({
     const buildSearchList = (modelData) => {
         if (!modelData) return []
         const searchList = []
-      
+
         Object.entries(modelData).map(([path, pathObj]) => {
-         
             const enz_obj = pathObj['enzymes']
-           
+
             Object.entries(enz_obj).map(([enz, enzarr]) => {
                 searchList.push({
                     abbr: enz,
@@ -40,8 +39,6 @@ function FluxModal({
             })
         })
 
-
-
         return searchList
     }
 
@@ -49,42 +46,38 @@ function FluxModal({
         return buildSearchList(modelData)
     }, [modelData])
 
- 
-
     const filtered = searchList?.filter(
         (r) =>
             r.abbr.toLowerCase().includes(query.toLowerCase()) ||
             r.description.toLowerCase().includes(query.toLowerCase())
     )
 
-
-    function downloadSGDCSV(sgd, filename = "sgd_result.csv") {
-        const { columns, data } = sgd;
+    function downloadSGDCSV(sgd, filename = 'sgd_result.csv') {
+        const { columns, data } = sgd
 
         // Prepare CSV Header
-        let csv = columns.join(",") + "\n";
+        let csv = columns.join(',') + '\n'
 
         // Convert rows
-        data.forEach(row => {
-            const gene = row[0][0];   // ['b4152'] → "b4152"
-            const growth = row[1];
-            const status = row[2];
+        data.forEach((row) => {
+            const gene = row[0][0] // ['b4152'] → "b4152"
+            const growth = row[1]
+            const status = row[2]
 
-            csv += `${gene},${growth},${status}\n`;
-        });
+            csv += `${gene},${growth},${status}\n`
+        })
 
         // Trigger download
-        const blob = new Blob([csv], { type: "text/csv" });
-        const url = URL.createObjectURL(blob);
+        const blob = new Blob([csv], { type: 'text/csv' })
+        const url = URL.createObjectURL(blob)
 
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = filename;
-        a.click();
+        const a = document.createElement('a')
+        a.href = url
+        a.download = filename
+        a.click()
 
-        URL.revokeObjectURL(url);
+        URL.revokeObjectURL(url)
     }
-
 
     function downloadFluxesAsCSV(fluxes, bounds, filename = 'fluxes.csv') {
         const csvRows = ['reaction,flux,lb,ub']
@@ -120,7 +113,6 @@ function FluxModal({
         }
 
         const { columns, data } = response
-  
 
         const validGrowths = data
             .map((row) => row[1])
@@ -130,7 +122,6 @@ function FluxModal({
         const maxGrowth = Math.max(...validGrowths)
 
         const selectedValue = objective_value.toFixed(3)
-
 
         // Keep only the first two columns, modify the second as percentage
         const csvRows = [
@@ -161,7 +152,64 @@ function FluxModal({
             }),
         ]
 
-     
+        const blob = new Blob([csvRows.join('\n')], { type: 'text/csv' })
+        const url = URL.createObjectURL(blob)
+        const a = document.createElement('a')
+        a.href = url
+        a.download = filename
+        a.click()
+        URL.revokeObjectURL(url)
+    }
+
+    const downloadCSV2 = (
+        response,
+        bounds,
+        objective_value,
+        filename = 'sgd_result.csv'
+    ) => {
+        if (!selectedRxn) {
+            alert('Please select a reaction value first.')
+            return
+        }
+
+        const { columns, data } = response
+
+        const validGrowths = data
+            .map((row) => row[1])
+            .filter((val) => val != null && !isNaN(val))
+
+        const minGrowth = Math.min(...validGrowths)
+        const maxGrowth = Math.max(...validGrowths)
+
+        const selectedValue = objective_value.toFixed(3)
+
+        // Keep only the first two columns, modify the second as percentage
+        const csvRows = [
+            [columns[0], 'Percentage Reduction in Growth'].join(
+                ','
+            ),
+            ...data.map((row) => {
+                const id = row[0][0] // assuming your ID is in row[0][0]
+                const growth = row[1]
+
+                let percentage
+                if (growth == null || isNaN(growth)) {
+                    percentage = 100
+                } else {
+                    // Round growth to two decimals first
+                    const roundedGrowth = Math.round(growth * 1000) / 1000
+
+                    // Calculate percentage relative to selected value, also rounded
+                    const res = (roundedGrowth / selectedValue) * 100
+                    percentage = (100 - res).toFixed(3)
+                    if (percentage > 100) percentage = 100
+                    else if (percentage < 0) percentage = 0
+                }
+    
+
+                return [id, percentage].join(',')
+            }),
+        ]
 
         const blob = new Blob([csvRows.join('\n')], { type: 'text/csv' })
         const url = URL.createObjectURL(blob)
@@ -187,7 +235,6 @@ function FluxModal({
     }
 
     async function handleCalculateFlux() {
-   
         if (selectedRxn === null || selectedRxn.length === '') {
             alert('Select an objective function')
             setStepFluxCalculation('select') // 👈 close modal here
@@ -195,7 +242,7 @@ function FluxModal({
         }
         setStepFluxCalculation('loading')
         const updatedModelData = JSON.parse(JSON.stringify(modelData))
-      
+
         for (const [enzyme, bounds] of Object.entries(reactionBoundsFlux)) {
             for (const [path, pathObj] of Object.entries(updatedModelData)) {
                 if (pathObj.enzymes[enzyme]) {
@@ -227,7 +274,8 @@ function FluxModal({
 
             const data = await res.json()
             if (data.status === 'error') throw new Error(data.message)
-      
+            console.log(data)
+
             let fluxes = null
             if (fluxType === 'srd') {
                 const flux_obj = {}
@@ -242,7 +290,6 @@ function FluxModal({
                     const enz = fl[0][0]
                     const val = fl[1]
 
-          
                     if (val === null || isNaN(val)) {
                         flux_obj[enz] = 100
                     } else {
@@ -260,7 +307,37 @@ function FluxModal({
                 })
 
                 fluxes = flux_obj
-            } else if (fluxType !== 'fva' && fluxType !== "sgd") {
+            } else if (fluxType === 'sgd') {
+                const flux_obj = {}
+                const returned_data = data?.sgd?.data
+
+                // Round selected value to 1 decimal
+                const selectedValue = parseFloat(
+                    data.objective_value.toFixed(3)
+                )
+
+                returned_data.forEach((fl) => {
+                    const enz = fl[0][0]
+                    const val = fl[1]
+
+                    if (val === null || isNaN(val)) {
+                        flux_obj[enz] = 100
+                    } else {
+                        // Round to 1 decimal
+                        const roundedGrowth = Math.round(val * 1000) / 1000
+
+                        const res = (roundedGrowth / selectedValue) * 100
+                        let percentage = (100 - res).toFixed(3)
+
+                        if (percentage > 100) percentage = 100
+                        else if (percentage < 0) percentage = 0
+
+                        flux_obj[enz] = percentage
+                    }
+                })
+
+                fluxes = flux_obj
+            } else if (fluxType !== 'fva' && fluxType !== 'sgd') {
                 fluxes = data.fluxes
             } else {
                 fluxes = {}
@@ -288,7 +365,7 @@ function FluxModal({
                 Object.entries(enzymes).forEach(([enz, arr]) => {
                     const updatedArr = [...arr]
                     if (enz in fluxes) {
-                        updatedArr[1] = fluxes[enz].toFixed(3)
+                        updatedArr[1] = fluxes[enz]
                     }
 
                     updatedEnzymes[enz] = updatedArr
@@ -307,12 +384,12 @@ function FluxModal({
                 downloadFluxesAsCSV(data.fluxes, bounds, 'cycle_free_flux.csv')
                 setEdgeFormat('flux')
                 setColorAction('flux')
-                
-            } else if (fluxType === "sgd") {
-                downloadSGDCSV(data.sgd, "sgd_result.csv");
-                setEdgeFormat("weight");
-                setColorAction("weight")
-            }else if (fluxType === 'fva') {
+            } else if (fluxType === 'sgd') {
+                // downloadSGDCSV(data.sgd, 'sgd_result.csv')
+                downloadCSV2(data.sgd, bounds, data.objective_value, "sgd_results.csv")
+                setEdgeFormat('weight')
+                setColorAction('weight')
+            } else if (fluxType === 'fva') {
                 const { minimum_flux, maximum_flux } = data
 
                 const reactions = Object.keys(maximum_flux)
@@ -362,7 +439,7 @@ function FluxModal({
                 err.response?.data?.message ||
                 err.message ||
                 'Failed to fetch reaction options'
-         
+
             toast.error(`Error: ${errorMessage}`)
             setStepFluxCalculation('select')
         }
@@ -509,9 +586,7 @@ function FluxModal({
                                     />
                                     Single Gene Deletion
                                 </label>
-                                
-                                
-                                
+
                                 <label className="flex cursor-pointer items-center gap-2">
                                     <input
                                         type="radio"

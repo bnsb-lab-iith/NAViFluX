@@ -49,7 +49,7 @@ function DownloadModal({
         )
 
     async function handleDownloadModel() {
-      
+        console.log(modelData)
         setStepDownloadModal('loading')
      
         try {

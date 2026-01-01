@@ -101,7 +101,6 @@ function ModelBuilder() {
 
         const genes = [...new Set(Object.values(gene_rxn_obj).flat())]
 
-        
         if (genes.length === 0 || Object.keys(gene_rxn_obj).length === 0) {
             toast('No gene–reaction data available to export.')
             return
@@ -116,7 +115,6 @@ function ModelBuilder() {
             return row
         })
 
-       
         if (matrix.length === 0) {
             console.warn('Generated matrix is empty.')
             return
@@ -1108,6 +1106,7 @@ function ModelBuilder() {
                     metabolites: {},
                     genes: {},
                     enzyme_crossref: {},
+                    stoichiometry: {},
                 })
         )
 
@@ -1137,6 +1136,7 @@ function ModelBuilder() {
                     EC: [],
                     KEGG: [],
                 }
+                newPathObj.stoichiometry[enzyme] = enzObj.stoichiometry
             })
         })
 
@@ -1207,7 +1207,7 @@ function ModelBuilder() {
     return (
         <div className="min-h-screen bg-stone-100 font-sans text-stone-800">
             <ModelHeader />
-            <main className="mb-2 flex h-[calc(100vh-80px)] flex-col bg-stone">
+            <main className="bg-stone mb-2 flex h-[calc(100vh-80px)] flex-col">
                 <ModelToolbar
                     selectedIds={selectedIds}
                     downloadGeneReactionMatrix={downloadGeneReactionMatrix}
