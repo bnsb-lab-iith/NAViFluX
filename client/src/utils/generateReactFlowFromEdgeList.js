@@ -16,12 +16,12 @@ export function generateReactFlowFromEdgeList(
     edgeFormat,
     allMetabolomicsValues
 ) {
-    // console.log(leadgenes)
+    
     const obj = {} // enzyme metadata
     const meta_obj = {} // metabolite info
     const rawEdges = []
     const knownPathways = new Set(selectedPathways)
-    // console.log(fontSize)
+   
 
     const minMetaboliteVal = Math.min(...allMetabolomicsValues)
     const maxMetaboliteVal = Math.max(...allMetabolomicsValues)
@@ -42,7 +42,7 @@ export function generateReactFlowFromEdgeList(
 
     const knownLabels = new Set()
     selectedPathways.forEach((path) => {
-        console.log(pathwayData[path])
+        
         if (pathwayData[path]) {
             const {
                 enzymes = {},
@@ -53,7 +53,7 @@ export function generateReactFlowFromEdgeList(
                 stoichiometry = {},
             } = pathwayData[path]
 
-            console.log(stoichiometry)
+           
 
             const enzymesWithSubsystem = {}
             for (const [enzyme, arr] of Object.entries(enzymes)) {
@@ -66,7 +66,7 @@ export function generateReactFlowFromEdgeList(
                 knownLabels.add(enzyme)
             }
 
-            console.log(enzymesWithSubsystem)
+            
 
             for (const metId of Object.keys(metabolites)) {
                 knownLabels.add(metId)
@@ -77,10 +77,6 @@ export function generateReactFlowFromEdgeList(
             rawEdges.push(...edges)
         }
     })
-
-    console.log(meta_obj)
-
-    console.log(obj)
 
     const nodesMap = new Map()
     const nodes = []
@@ -268,8 +264,7 @@ export function generateReactFlowFromEdgeList(
     for (const enzyme of Object.keys(groupedEdges)) {
         const substrates = groupedEdges[enzyme].substrates || []
         const products = groupedEdges[enzyme].products || []
-        // console.log(substrates, products)
-        // console.log(obj[enzyme])
+
         const [desc, flux, lb, ub, path] = obj[enzyme] || []
 
         const enzymeId = getNodeId(enzyme)
@@ -284,10 +279,7 @@ export function generateReactFlowFromEdgeList(
         // If flux is present, use it to refine direction
         const parsedFlux = parseFloat(flux)
         const hasFlux = !isNaN(parsedFlux)
-        // console.log(
-        //     `Enzyme: ${enzyme}, lb=${lb}, ub=${ub}, flux=${flux}, hasFlux=${hasFlux}, forward=${forward}, reverse=${reverse}`
-        // )
-        // console.log(enzyme, substrates, products)
+
         if (hasFlux && flux > 0 && edgeFormat === 'flux') {
             // Case: Forward flux
             substrates.forEach((s) =>

@@ -11,7 +11,6 @@ export function createNodeAndEdges(
     const enzymeMap = {}
     const metaboliteMap = {}
     const rawEdges = []
-
     const updatedModelData = {}
     Object.entries(reactionList).forEach(([enzyme, reaction]) => {
         const subsystem = reaction.subsystem || 'Unassigned'
@@ -32,6 +31,7 @@ export function createNodeAndEdges(
                 metabolites: {},
                 genes: {},
                 enzyme_crossref: {},
+                stoichiometry: {},
             })
     )
 
@@ -51,6 +51,7 @@ export function createNodeAndEdges(
             })
             newPathObj.genes[enzyme] = enzObj.genes
             newPathObj.enzyme_crossref[enzyme] = { BIGG: [], EC: [], KEGG: [] }
+            newPathObj.stoichiometry[enzyme] = enzObj.stoichiometry
         })
     })
 
@@ -62,7 +63,8 @@ export function createNodeAndEdges(
             rxn.bounds?.lower,
             rxn.bounds?.upper,
             rxn.subsystem,
-            rxn.genes
+            rxn.genes,
+            rxn.stoichiometry
         ]
 
         Object.entries(rxn.metabolites || {}).forEach(([id, label]) => {
@@ -143,7 +145,7 @@ export function createNodeAndEdges(
             }
 
             if (enzymeMap[label]) {
-                const [desc, flux, lb, ub, subsystem, genes] = enzymeMap[label]
+                const [desc, flux, lb, ub, subsystem, genes, stoich] = enzymeMap[label]
                 nodes.push({
                     id: label,
                     temp_id: id,
@@ -164,7 +166,8 @@ export function createNodeAndEdges(
                         BIGG_crossref: [],
                         KEGG_crossref: [],
                         EC_crossref: [],
-                        gene: genes
+                        gene: genes,
+                        stoichiometry: stoich
                     },
                 })
             } else if (metaboliteMap[label]) {
