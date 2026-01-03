@@ -248,6 +248,13 @@ pip install -r requirements.txt
 flask run
 ```
 
+## Citation
+
+If you use **NAViFluX** in your research, please cite:
+
+> **Manjunatha Beduru Krishnamurthy, P S Harish, & Abhishek Subramanian** (2026).  
+> *NAViFluX: a visualization-centric platform for interactive analysis, refinement and design of genome-scale metabolic networks*.  
+> Zenodo. https://doi.org/10.5281/zenodo.18137089
 
 
 ## License
