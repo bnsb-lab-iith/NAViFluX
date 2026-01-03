@@ -31,7 +31,7 @@ The software enables users to:
 - Curation of GEMs using BiGG and KEGG databases
 - Perform Flux Analysis, Centrality Analysis and Pathway Enrchiment over GEMs.
 
-To know more about NAViFluX and it's use cases we highly recommend you to check out our documentation. 
+To know more about NAViFluX and it's use cases we highly recommend you to check out our [documentation](https://bnsb-lab-iith.github.io/NAViFluX-Documentation/). 
 
 ---
 
