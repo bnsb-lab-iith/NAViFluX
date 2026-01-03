@@ -8,10 +8,20 @@ function ContactPage() {
         <div className="min-h-screen font-sans text-stone-800">
             {/* HEADER */}
             <header className="flex w-full items-center justify-between border-b border-stone-300 bg-white px-10 pb-3 shadow-sm">
-                <img src="/analysis_icon.png" alt="NAViFluX Icon" className="h-14 w-auto object-contain cursor-pointer" onClick={() => navigate('/')}/>
+                <img
+                    src="/analysis_icon.png"
+                    alt="NAViFluX Icon"
+                    className="h-14 w-auto cursor-pointer object-contain"
+                    onClick={() => navigate('/')}
+                />
                 <div className="flex items-center gap-6 text-stone-600">
                     <h2
-              
+                        onClick={() =>
+                            window.open(
+                                'https://bnsb-lab-iith.github.io/NAViFluX-Documentation/',
+                                '_blank'
+                            )
+                        }
                         className="cursor-pointer transition hover:text-[#003399]"
                     >
                         Documentation
@@ -40,9 +50,9 @@ function ContactPage() {
                     Get in Touch with Us
                 </h2>
                 <p className="max-w-2xl text-lg leading-relaxed text-stone-700">
-                    Have questions or facing any issues? Reach out
-                    to the <strong className="text-[#003399]">NAViFluX</strong>{' '}
-                    team at IIT Hyderabad. We’d love to hear from you!
+                    Have questions or facing any issues? Reach out to the{' '}
+                    <strong className="text-[#003399]">NAViFluX</strong> team at
+                    IIT Hyderabad. We’d love to hear from you!
                 </p>
 
                 {/* Contact Info Cards */}
@@ -64,8 +74,8 @@ function ContactPage() {
                         <MapPin className="mb-4 text-5xl text-[#003399]" />
                         <h3 className="text-lg font-semibold">Address</h3>
                         <p className="mt-2 max-w-xs text-stone-600">
-                            Biological Networks and Systems Biology Lab, IIT Hyderabad,
-                            Kandi, Telangana, India
+                            Biological Networks and Systems Biology Lab, IIT
+                            Hyderabad, Kandi, Telangana, India
                         </p>
                     </div>
 
@@ -106,8 +116,8 @@ function ContactPage() {
 
             {/* FOOTER */}
             <footer className="bg-stone-200 py-6 text-center text-sm text-stone-600">
-                © 2025 NAViFluX, Biological Networks and Systems Biology Lab, IIT Hyderabad
-                — All rights reserved.
+                © 2025 NAViFluX, Biological Networks and Systems Biology Lab,
+                IIT Hyderabad — All rights reserved.
             </footer>
         </div>
     )

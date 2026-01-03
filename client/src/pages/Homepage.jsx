@@ -22,7 +22,15 @@ export default function Homepage() {
                 </div>
 
                 <nav className="mt-2 flex items-center gap-8 text-stone-600">
-                    <button className="transition hover:text-[#003399]">
+                    <button
+                        onClick={() =>
+                            window.open(
+                                'https://bnsb-lab-iith.github.io/NAViFluX-Documentation/',
+                                '_blank'
+                            )
+                        }
+                        className="transition hover:text-[#003399]"
+                    >
                         Documentation
                     </button>
 

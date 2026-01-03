@@ -12,7 +12,12 @@ function VisualizerHeader() {
     return (
         <header className="flex w-full items-center justify-between border-b border-stone-300 bg-white px-6 pb-3 shadow-sm">
             {/* Logo */}
-            <img src="/analysis_icon.png" alt="NAViFluX Icon" className="h-14 w-auto object-contain cursor-pointer" onClick={() => navigate('/')}/>
+            <img
+                src="/analysis_icon.png"
+                alt="NAViFluX Icon"
+                className="h-14 w-auto cursor-pointer object-contain"
+                onClick={() => navigate('/')}
+            />
 
             {/* Desktop Nav */}
             <div className="hidden items-center gap-6 text-stone-600 lg:flex">
@@ -36,7 +41,15 @@ function VisualizerHeader() {
                 >
                     Model Builder
                 </h2>
-                <h2 className="cursor-pointer transition hover:text-[#003399]">
+                <h2
+                    onClick={() =>
+                        window.open(
+                            'https://bnsb-lab-iith.github.io/NAViFluX-Documentation/',
+                            '_blank'
+                        )
+                    }
+                    className="cursor-pointer transition hover:text-[#003399]"
+                >
                     Documentation
                 </h2>
                 <h2
