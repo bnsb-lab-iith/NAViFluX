@@ -251,6 +251,10 @@ pip install -r requirements.txt
 flask run
 ```
 
+## Test Datasets
+
+The test data can be found in the /data/TEST directory.
+
 ## Citation
 
 If you use **NAViFluX** in your research, please cite:
