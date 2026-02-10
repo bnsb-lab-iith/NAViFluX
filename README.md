@@ -218,8 +218,6 @@ npm install
 npm run dev
 ```
 
-Open the displayed local URL in your browser.
-
 
 ### Start the Backend
 
@@ -250,6 +248,8 @@ Install dependencies and run the server:
 pip install -r requirements.txt
 flask run
 ```
+
+Once you execute the commands on both the terminals successfully, open the terminal where you started the `client` and open the displayed local URL (usually `localhost:5173`) in your browser.
 
 ## Test Datasets
 
