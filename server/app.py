@@ -10,6 +10,7 @@ import os
 import tempfile
 import uuid
 import pickle
+import string
 import re
 from collections import defaultdict
 from scipy.io import savemat
@@ -27,11 +28,16 @@ import sys
 import shutil
 import zipfile
 import threading
-
+from cobra.sampling import sample
 from cobra.flux_analysis import pfba
 from cobra.flux_analysis import flux_variability_analysis
 from cobra.flux_analysis.loopless import loopless_solution
-from cobra.flux_analysis import single_reaction_deletion, single_gene_deletion
+from cobra.flux_analysis import single_reaction_deletion, single_gene_deletion, find_blocked_reactions
+from cobra.manipulation import delete_model_genes, knock_out_model_genes
+import igraph as ig
+import leidenalg as la
+from cobra.core.gene import parse_gpr
+import carveme
 
 app = Flask(__name__)
 CORS(app)
@@ -107,6 +113,14 @@ def get_data(db="Other"):
     cached_data[db] = (cur_metabolites, smat, df, df2)
     return cached_data[db]
 
+
+# Generate subsystem names: 1A, 1B, ..., 1Z, 2A, 2B, ..., 2Z, 3A, ...
+def generate_subsystem_names():
+    num = 1
+    while True:
+        for letter in string.ascii_uppercase:
+            yield f"Subsystem {num}{letter}"
+        num += 1
 
 def check_kegg_bigg(met):
     cleaned_met = clean_met_name(met)
@@ -273,6 +287,26 @@ def analyseModel():
         else:
             return jsonify({'status': 'error', 'message' : "Unsupported file type"})
 
+
+        ###### Subsystem Assignment 
+        subsystems = [rxn.subsystem for rxn in model.reactions]
+        total = len(subsystems)
+        with_subsystem = sum(1 for s in subsystems if s and s.strip())
+        without_subsystem = total - with_subsystem
+
+        rxns_without_subsystem = [rxn for rxn in model.reactions if not rxn.subsystem or not rxn.subsystem.strip()]
+
+        name_gen = generate_subsystem_names()
+        group_size = 15
+        assigned_count = 0
+
+        for i in range(0, len(rxns_without_subsystem), group_size):
+            subsystem_name = next(name_gen)
+            group = rxns_without_subsystem[i:i + group_size]
+            for rxn in group:
+                rxn.subsystem = subsystem_name
+                assigned_count += 1
+
         # Stoichiometric matrix
         S = cobra.util.create_stoichiometric_matrix(model)
         S_df = pd.DataFrame(S, index=[m.id for m in model.metabolites],
@@ -321,8 +355,12 @@ def analyseModel():
 
         gene_obj = {r.id: [g.id for g in r.genes] for r in model.reactions}
         gene_df = pd.DataFrame([
-            {"reaction": r_id, "gene": genes}
-            for r_id, genes in gene_obj.items()
+            {
+                "reaction": r.id,
+                "gene": [g.id for g in r.genes],
+                "gene_reaction_rule": r.gene_reaction_rule
+            }
+            for r in model.reactions
         ])
         df1 = pd.merge(df1, gene_df, left_on="Abbreviation", right_on="reaction")
 
@@ -363,6 +401,7 @@ def analyseModel():
             gene_info = {}
             enzyme_crossref = {}
             stoichiometry = {}
+            gpr = {}
 
             for reac in enzymes:
                 
@@ -392,7 +431,7 @@ def analyseModel():
                 enzyme_info[reac] = [desc, flux, lower_bound, upper_bound, pathwayName]
                 gene_info[reac] = row["gene"].iloc[0]
                 enzyme_crossref[reac] = {"BIGG": row["bigg-crossref"].iloc[0], "KEGG": row["kegg-crossref"].iloc[0], "EC": row["ec-code"].iloc[0]}
-
+                gpr[reac] = row["gene_reaction_rule"].iloc[0]
             
             metabolite_names = np.unique(np.array(metabolite_names))
             final_metabolites = {}
@@ -414,6 +453,7 @@ def analyseModel():
                 "enzymes": enzyme_info,
                 "metabolites": final_metabolites,
                 "genes": gene_info, 
+                "gpr": gpr,
                 "enzyme_crossref" : enzyme_crossref,
                 "stoichiometry": stoichiometry
             }
@@ -1019,7 +1059,7 @@ def calculateFlux():
     try:
         if not request.is_json:
             return jsonify({'status': 'error', 'message': 'Request must be JSON'}), 400
-
+        tic = time.time()
         data = request.get_json()
         modelData = data.get('new_rxn')
         flux_type = data.get('flux_type')
@@ -1076,6 +1116,7 @@ def calculateFlux():
                         reaction_edges[tgt].append((src, None))
 
                 gene_list = pathData.get("genes", {})
+                gpr = pathData.get("gpr", {})
 
                 for enzyme_id, edge_list in reaction_edges.items():
                     reaction = Reaction(enzyme_id)
@@ -1102,8 +1143,10 @@ def calculateFlux():
                     reaction.subsystem = enzyme_info[4]
 
                     gene = list({g.strip() for g in gene_list.get(enzyme_id, []) if g.strip()})
+                    rxn_gpr = gpr.get(enzyme_id, "")
                     if gene:
-                        rule = "(" + " or ".join(gene) + ")" if len(gene) > 1 else f'( {gene[0]} )'
+                        # rule = "(" + " or ".join(gene) + ")" if len(gene) > 1 else f'( {gene[0]} )'
+                        rule = rxn_gpr
 
                         
                         if reaction.gene_reaction_rule != rule:
@@ -1117,51 +1160,78 @@ def calculateFlux():
 
             model.objective = objective_rxn
             # cleaned_model = clean_cobra_model(model)
+            
 
             if flux_type == 'loopless':
                 solution = loopless_solution(model)
+                toc = time.time()
+                time_taken = toc - tic
                 return jsonify({
                     "objective_value": solution.objective_value,
-                    "fluxes": solution.fluxes.to_dict()
+                    "fluxes": solution.fluxes.to_dict(),
+                    "time": time_taken
                 })
 
             elif flux_type == 'pfba':
                 solution = pfba(model)
+                toc = time.time()
+                time_taken = toc - tic
                 return jsonify({
                     "objective_value": solution.objective_value,
-                    "fluxes": solution.fluxes.to_dict()
+                    "fluxes": solution.fluxes.to_dict(),
+                    "time": time_taken
                 })
 
             elif flux_type == 'fba':
                 solution = model.optimize()
+                toc = time.time()
+                time_taken = toc - tic
                 return jsonify({
                     "objective_value": solution.objective_value,
-                    "fluxes": solution.fluxes.to_dict()
+                    "fluxes": solution.fluxes.to_dict(),
+                    "time": time_taken
                 })
             
             elif flux_type == 'fva':
                 # You can adjust fraction_of_optimum if needed (default: 1.0)
                 fva_result = flux_variability_analysis(model, fraction_of_optimum=1.0)
-
+                toc = time.time()
+                time_taken = toc - tic
                 return jsonify({
                     "minimum_flux": fva_result['minimum'].to_dict(),
-                    "maximum_flux": fva_result['maximum'].to_dict()
+                    "maximum_flux": fva_result['maximum'].to_dict(),
+                    "time": time_taken
                 })
 
             elif flux_type == 'srd':
                 result = single_reaction_deletion(model)
+                
                 solution = model.optimize()
+                toc = time.time()
+                time_taken = toc - tic
                 return jsonify({
                     "srd": serialize_deletion_result(result),
-                    "objective_value": solution.objective_value
+                    "objective_value": solution.objective_value,
+                    "time": time_taken
                 })
 
             elif flux_type == 'sgd':
                 result = single_gene_deletion(model)
                 solution = model.optimize()
+                toc = time.time()
+                time_taken = toc - tic
                 return jsonify({
                     "sgd": serialize_deletion_result(result),
-                    "objective_value": solution.objective_value
+                    "objective_value": solution.objective_value,
+                    "time": time_taken
+                })
+            elif flux_type == "blocked":
+                blocled_reactions = find_blocked_reactions(model)
+                toc = time.time()
+                time_taken = toc - tic
+                return jsonify({
+                    "blocked_reactions": blocled_reactions,
+                    "time": time_taken
                 })
 
         except KeyError as ke:
@@ -1714,6 +1784,7 @@ def gsea():
 
                 reaction_edges = defaultdict(list)
                 gene_list = pathData.get("genes", {})
+                gpr = pathData.get("gpr", {})
                 for src, tgt in all_edges:
                     if src in pathData['enzymes']:  # enzyme → metabolite (product)
                         reaction_edges[src].append((None, tgt))
@@ -1743,8 +1814,10 @@ def gsea():
 
                     reaction.subsystem = enzyme_info[4]
                     gene = list({g.strip() for g in gene_list.get(enzyme_id, []) if g.strip()})
+                    rxn_gpr = gpr.get(enzyme_id, "")
                     if gene:
-                        rule = "(" + " or ".join(gene) + ")" if len(gene) > 1 else f'( {gene[0]} )'
+                        # rule = "(" + " or ".join(gene) + ")" if len(gene) > 1 else f'( {gene[0]} )'
+                        rule = rxn_gpr
 
                         
                         if reaction.gene_reaction_rule != rule:
@@ -2031,6 +2104,7 @@ def ora():
 
                 reaction_edges = defaultdict(list)
                 gene_list = pathData.get("genes", {})
+                gpr = pathData.get("gpr", {})
                 for src, tgt in all_edges:
                     if src in pathData['enzymes']:  # enzyme → metabolite (product)
                         reaction_edges[src].append((None, tgt))
@@ -2061,10 +2135,11 @@ def ora():
 
                     reaction.subsystem = enzyme_info[4]
                     gene = list({g.strip() for g in gene_list.get(enzyme_id, []) if g.strip()})
+                    rxn_gpr = gpr.get(enzyme_id, "")
                     if gene:
-                        rule = "(" + " or ".join(gene) + ")" if len(gene) > 1 else f'( {gene[0]} )'
+                        # rule = "(" + " or ".join(gene) + ")" if len(gene) > 1 else f'( {gene[0]} )'
+                        rule = rxn_gpr
 
-                        
                         if reaction.gene_reaction_rule != rule:
                             try:
                                 reaction.gene_reaction_rule = rule
@@ -2211,7 +2286,7 @@ def downloadModelTest():
 
 
                 gene_list = pathData.get("genes", {})
-
+                gpr = pathData.get("gpr", {})
                 for enzyme_id, edge_list in reaction_edges.items():
                     reaction = Reaction(enzyme_id)
                     enzyme_info = pathData['enzymes'].get(enzyme_id, [])
@@ -2235,8 +2310,10 @@ def downloadModelTest():
                     reaction.subsystem = enzyme_info[4]
 
                     gene = list({g.strip() for g in gene_list.get(enzyme_id, []) if g.strip()})
+                    rxn_gpr = gpr.get(enzyme_id, "")
                     if gene:
-                        rule = "(" + " or ".join(gene) + ")" if len(gene) > 1 else f'( {gene[0]} )'
+                        # rule = "(" + " or ".join(gene) + ")" if len(gene) > 1 else f'( {gene[0]} )'
+                        rule = rxn_gpr
 
                         if reaction.gene_reaction_rule != rule:
                             try:
@@ -2342,7 +2419,336 @@ def download_gsea():
     except Exception as e:
         
         return jsonify({"status": "error", "message": str(e)}), 500
-    
+
+
+@app.route("/api/v1/delete-genes", methods=["POST"])
+def delete_genes():
+    try:
+        if not request.is_json:
+                return jsonify({'status': 'error', 'message': 'Request must be JSON'}), 400
+
+        data = request.get_json()
+        modelData = data.get('new_rxn')
+        delete_genes = data.get("delete_genes")
+        objective = data.get('objective')
+        choice = data.get("choice")
+        path_key = list(modelData.keys())[0]
+        path_obj = modelData[path_key]
+        firstmet = list(path_obj["metabolites"].keys())[0]
+        
+        db = check_kegg_bigg(firstmet)
+        if(db == "BIGG"):
+            cur_metabolites, smat, df, df2 = get_data(db)
+        elif(db == "KEGG"):
+            cur_metabolites, smat, df, df2 = get_data(db)
+        else: 
+            return jsonify({
+                    'status': 'error',
+                    'message': f'Metabolite should belong to only one database either KEGG or BiGG'
+                }), 400
+
+        def is_currency_metabolite(met):
+            currency_keywords = [
+                "h", "k", "pi", "cl", "o2", "na1", "h2o", "co2", "atp", "adp",
+                "utp", "gtp", "gdp", "amp", "nad", "fad", "coa", "ppi", "nh4", "nh3", 
+                "acp", "thf", "crn", "nadh", "fadh", "nadp", "nadph"
+                ]
+            currency_keywords_final = cur_metabolites + currency_keywords
+            return any(met.lower().startswith(cur.lower()) for cur in currency_keywords_final)
+        
+        try:
+            model = Model('new_model')
+            for path in modelData:
+                pathData = modelData[path]
+                metabolites = {}
+                for met_id, arr in pathData['metabolites'].items():
+                    name, formula, compt, crossref, weight = arr
+                    crossrefdict = {"chebi": crossref}
+                    metabolites[met_id] = Metabolite(id=met_id, name=name, compartment=met_id.split('_')[-1], formula=formula)
+                    metabolites[met_id].annotation = crossrefdict
+
+                all_edges = pathData['edges'] + pathData['currency_edges']
+                currency_mets = set()
+                for a, b in all_edges:
+                    for met in [a, b]:
+                        if is_currency_metabolite(met):
+                            currency_mets.add(met)
+
+                for met_id in currency_mets:
+                    if met_id not in metabolites:
+                        metabolites[met_id] = Metabolite(id=met_id, name=met_id, compartment=met_id.split('_')[-1])
+
+                reaction_edges = defaultdict(list)
+                for src, tgt in all_edges:
+                    if src in pathData['enzymes']:  # enzyme → metabolite (product)
+                        reaction_edges[src].append((None, tgt))
+                    elif tgt in pathData['enzymes']:  # metabolite (substrate) → enzyme
+                        reaction_edges[tgt].append((src, None))
+
+
+                gene_list = pathData.get("genes", {})
+                gpr = pathData.get("gpr", {})
+                for enzyme_id, edge_list in reaction_edges.items():
+                    reaction = Reaction(enzyme_id)
+                    enzyme_info = pathData['enzymes'].get(enzyme_id, [])
+            
+                    reaction.name = enzyme_info[0] if len(enzyme_info) > 0 else enzyme_id
+                    reaction.lower_bound = enzyme_info[2] 
+                    reaction.upper_bound = enzyme_info[3] 
+                    rxn_annotation = pathData["enzyme_crossref"][enzyme_id]
+                    cobra_annotation = {key_map[k]: v for k, v in rxn_annotation.items() if k in key_map}
+                    reaction.annotation = cobra_annotation
+                    actual_stoichiometry = pathData["stoichiometry"][enzyme_id]
+                    model_stoichiometry = {}
+                    for src, tgt in edge_list:
+                        if src:
+                            model_stoichiometry[metabolites[src]] = actual_stoichiometry[src]
+                        if tgt:
+                            model_stoichiometry[metabolites[tgt]] = actual_stoichiometry[tgt]
+                            
+                    reaction.add_metabolites(model_stoichiometry)
+
+                    reaction.subsystem = enzyme_info[4]
+
+                    gene = list({g.strip() for g in gene_list.get(enzyme_id, []) if g.strip()})
+                    rxn_gpr = gpr.get(enzyme_id, "")
+                    if gene:
+                        # rule = "(" + " or ".join(gene) + ")" if len(gene) > 1 else f'( {gene[0]} )'
+                        rule = rxn_gpr
+
+                        if reaction.gene_reaction_rule != rule:
+                            try:
+                                reaction.gene_reaction_rule = rule
+                            except Exception as e:
+                                continue
+
+                    model.add_reactions([reaction])
+
+            # cleaned_model = clean_cobra_model(model)
+            if (objective != 'No Reaction'):
+                model.objective = objective
+
+            
+            # baseline stats
+            reactions_lb_ub_zero_before = sum(
+                1 for rxn in model.reactions if rxn.lower_bound == 0 and rxn.upper_bound == 0
+            )
+
+            original_solution = model.optimize()
+            working_model = model.copy() if choice == "temporary" else model
+            knock_out_model_genes(working_model, delete_genes)
+            reactions_lb_ub_zero_after = sum(
+                1 for rxn in working_model.reactions
+                if rxn.lower_bound == 0 and rxn.upper_bound == 0
+            )
+            new_solution = working_model.optimize()
+            change_in_objective = None
+            percent_change = None
+
+            if original_solution.status == "optimal" and new_solution.status == "optimal":
+                change_in_objective = new_solution.objective_value - original_solution.objective_value
+                percent_change = (
+                    (change_in_objective / original_solution.objective_value) * 100
+                    if original_solution.objective_value != 0
+                    else 0
+                )
+
+            blocked_change = reactions_lb_ub_zero_after - reactions_lb_ub_zero_before
+            gene_df = pd.DataFrame([
+                {
+                    "reaction": r.id,
+                    "gene": [g.id for g in r.genes],
+                    "gene_reaction_rule": r.gene_reaction_rule
+                }
+                for r in working_model.reactions
+            ])
+
+            return jsonify({
+                "status": "success",
+                "result": {
+                    "objective_before": original_solution.objective_value,
+                    "objective_after": new_solution.objective_value,
+                    "change_in_objective": change_in_objective,
+                    "percent_change": percent_change,
+                    "blocked_reactions_before": reactions_lb_ub_zero_before,
+                    "blocked_reactions_after": reactions_lb_ub_zero_after,
+                    "blocked_reactions_change": blocked_change,
+                },
+                "gene_reaction_table": gene_df.to_dict(orient="records")
+            })
+            
+        except KeyError as ke:
+                return jsonify({
+                        'status': 'error',
+                        'message': f'Invalid metabolite or enzyme reference: {str(ke)}'
+                    }), 400
+                
+        except Exception as processing_error:
+                return jsonify({
+                        'status': 'error',
+                        'message': 'Failed to process metabolic data'
+                    }), 500
+
+    except Exception as e:
+        
+        return jsonify({
+            'status': 'error',
+            'message': 'Internal server error'
+        }), 500
+
+@app.route("/api/v1/flux-sampling", methods=["POST"])
+def sample_flux():
+    try:
+        if not request.is_json:
+                return jsonify({'status': 'error', 'message': 'Request must be JSON'}), 400
+
+        tic = time.time()
+
+        data = request.get_json()
+        modelData = data.get('new_rxn')
+        samples = data.get("permutations")
+        objective = data.get("objective")
+        path_key = list(modelData.keys())[0]
+        path_obj = modelData[path_key]
+        firstmet = list(path_obj["metabolites"].keys())[0]
+
+        
+        db = check_kegg_bigg(firstmet)
+        if(db == "BIGG"):
+            cur_metabolites, smat, df, df2 = get_data(db)
+        elif(db == "KEGG"):
+            cur_metabolites, smat, df, df2 = get_data(db)
+        else: 
+            return jsonify({
+                    'status': 'error',
+                    'message': f'Metabolite should belong to only one database either KEGG or BiGG'
+                }), 400
+
+        def is_currency_metabolite(met):
+            currency_keywords = [
+                "h", "k", "pi", "cl", "o2", "na1", "h2o", "co2", "atp", "adp",
+                "utp", "gtp", "gdp", "amp", "nad", "fad", "coa", "ppi", "nh4", "nh3", 
+                "acp", "thf", "crn", "nadh", "fadh", "nadp", "nadph"
+                ]
+            currency_keywords_final = cur_metabolites + currency_keywords
+            return any(met.lower().startswith(cur.lower()) for cur in currency_keywords_final)
+        
+        try:
+            model = Model('new_model')
+            for path in modelData:
+                pathData = modelData[path]
+                metabolites = {}
+                for met_id, arr in pathData['metabolites'].items():
+                    name, formula, compt, crossref, weight = arr
+                    crossrefdict = {"chebi": crossref}
+                    metabolites[met_id] = Metabolite(id=met_id, name=name, compartment=met_id.split('_')[-1], formula=formula)
+                    metabolites[met_id].annotation = crossrefdict
+
+                all_edges = pathData['edges'] + pathData['currency_edges']
+                currency_mets = set()
+                for a, b in all_edges:
+                    for met in [a, b]:
+                        if is_currency_metabolite(met):
+                            currency_mets.add(met)
+
+                for met_id in currency_mets:
+                    if met_id not in metabolites:
+                        metabolites[met_id] = Metabolite(id=met_id, name=met_id, compartment=met_id.split('_')[-1])
+
+                reaction_edges = defaultdict(list)
+                for src, tgt in all_edges:
+                    if src in pathData['enzymes']:  # enzyme → metabolite (product)
+                        reaction_edges[src].append((None, tgt))
+                    elif tgt in pathData['enzymes']:  # metabolite (substrate) → enzyme
+                        reaction_edges[tgt].append((src, None))
+
+
+                gene_list = pathData.get("genes", {})
+                gpr = pathData.get("gpr", {})
+                for enzyme_id, edge_list in reaction_edges.items():
+                    reaction = Reaction(enzyme_id)
+                    enzyme_info = pathData['enzymes'].get(enzyme_id, [])
+            
+                    reaction.name = enzyme_info[0] if len(enzyme_info) > 0 else enzyme_id
+                    reaction.lower_bound = enzyme_info[2] 
+                    reaction.upper_bound = enzyme_info[3] 
+                    rxn_annotation = pathData["enzyme_crossref"][enzyme_id]
+                    cobra_annotation = {key_map[k]: v for k, v in rxn_annotation.items() if k in key_map}
+                    reaction.annotation = cobra_annotation
+                    actual_stoichiometry = pathData["stoichiometry"][enzyme_id]
+                    model_stoichiometry = {}
+                    for src, tgt in edge_list:
+                        if src:
+                            model_stoichiometry[metabolites[src]] = actual_stoichiometry[src]
+                        if tgt:
+                            model_stoichiometry[metabolites[tgt]] = actual_stoichiometry[tgt]
+                            
+                    reaction.add_metabolites(model_stoichiometry)
+
+                    reaction.subsystem = enzyme_info[4]
+
+                    gene = list({g.strip() for g in gene_list.get(enzyme_id, []) if g.strip()})
+                    rxn_gpr = gpr.get(enzyme_id)
+
+                    if gene:
+                        # rule = "(" + " or ".join(gene) + ")" if len(gene) > 1 else f'( {gene[0]} )'
+                        rule = rxn_gpr
+
+                        if reaction.gene_reaction_rule != rule:
+                            try:
+                                reaction.gene_reaction_rule = rule
+                            except Exception as e:
+                                return jsonify({
+                                    'status': 'error',
+                                    'message': 'Gene Rule Error'
+                                }), 500
+
+                    model.add_reactions([reaction])
+
+            # cleaned_model = clean_cobra_model(model)
+            print("model building done")
+            model.objective = objective
+            sol = model.optimize()
+
+            if sol.status != "optimal":
+                print("Not optimal")
+                return jsonify({
+                    "status": "error",
+                    "message": "Model is infeasible, cannot perform flux sampling"
+                }), 400
+            s = sample(model, samples)
+            toc = time.time()
+            print(s.head())
+
+            return jsonify({
+                    'status': 'success',
+                    "samples": s.to_dict(orient="records"),
+                    "time_taken": toc - tic
+                })
+
+        except KeyError as ke:
+                return jsonify({
+                        'status': 'error',
+                        'message': f'Invalid metabolite or enzyme reference: {str(ke)}'
+                    }), 400
+                
+        except Exception as processing_error:
+            import traceback
+            traceback.print_exc()
+            print(processing_error)
+
+            return jsonify({
+                'status': 'error',
+                'message': str(processing_error)
+            }), 500
+
+    except Exception as e:
+        
+        return jsonify({
+            'status': 'error',
+            'message': 'Internal server error'
+        }), 500
+
 
 if __name__ == "__main__":
     app.run(debug=True)

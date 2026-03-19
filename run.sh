@@ -8,8 +8,10 @@ SERVER_PORT=5000
 CLIENT_PORT=5173
 CLIENT_URL="http://localhost:${CLIENT_PORT}"
 
-SERVER_PATH="./server"
-CLIENT_PATH="./client"
+# Resolve absolute paths from script location
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SERVER_PATH="${SCRIPT_DIR}/server"
+CLIENT_PATH="${SCRIPT_DIR}/client"
 
 TIMEOUT_SECONDS=600
 CHECK_INTERVAL=2
@@ -19,20 +21,20 @@ CHECK_INTERVAL=2
 # -------------------------------------------------
 
 open_terminal() {
-    # Cross-terminal support (Linux & macOS)
+    # Cross-terminal support for Linux
     if command -v gnome-terminal >/dev/null 2>&1; then
         gnome-terminal -- bash -c "$1; exec bash"
+    elif command -v konsole >/dev/null 2>&1; then
+        konsole -e bash -c "$1; exec bash"
+    elif command -v xfce4-terminal >/dev/null 2>&1; then
+        xfce4-terminal -e "bash -c '$1; exec bash'"
+    elif command -v mate-terminal >/dev/null 2>&1; then
+        mate-terminal -e "bash -c '$1; exec bash'"
     elif command -v xterm >/dev/null 2>&1; then
-        xterm -e "$1"
-    elif [[ "$OSTYPE" == "darwin"* ]]; then
-        osascript <<EOF
-tell application "Terminal"
-    do script "$1"
-    activate
-end tell
-EOF
+        xterm -e bash -c "$1; exec bash"
     else
         echo "❌ No supported terminal emulator found."
+        echo "   Install one of: gnome-terminal, konsole, xfce4-terminal, mate-terminal, xterm"
         exit 1
     fi
 }
@@ -40,8 +42,6 @@ EOF
 open_browser() {
     if command -v xdg-open >/dev/null 2>&1; then
         xdg-open "$1"
-    elif [[ "$OSTYPE" == "darwin"* ]]; then
-        open "$1"
     else
         echo "⚠️  Could not auto-open browser. Open manually: $1"
     fi
@@ -52,12 +52,7 @@ open_browser() {
 # -------------------------------------------------
 echo "1. Starting Flask server in a new terminal..."
 
-SERVER_CMD="
-cd ${SERVER_PATH} || exit 1
-source venv/bin/activate
-echo 'Server terminal active.'
-flask run
-"
+SERVER_CMD="cd ${SERVER_PATH} || exit 1; source venv/bin/activate; echo 'Server terminal active.'; flask run"
 
 open_terminal "$SERVER_CMD"
 
@@ -91,16 +86,13 @@ done
 # -------------------------------------------------
 echo "3. Starting client dev server..."
 
-CLIENT_CMD="
-cd ${CLIENT_PATH} || exit 1
-echo 'Opening browser...'
-$(command -v xdg-open || command -v open) ${CLIENT_URL} >/dev/null 2>&1
-echo 'Client terminal active.'
-echo 'Starting NPM dev server (Press Ctrl+C to stop)...'
-npm run dev
-"
+CLIENT_CMD="cd ${CLIENT_PATH} || exit 1; echo 'Client terminal active.'; echo 'Starting NPM dev server (Press Ctrl+C to stop)...'; npm run dev"
 
 open_terminal "$CLIENT_CMD"
+
+# Give the client a moment to start, then open browser
+sleep 3
+open_browser "${CLIENT_URL}"
 
 # -------------------------------------------------
 echo "-------------------------------------------------"

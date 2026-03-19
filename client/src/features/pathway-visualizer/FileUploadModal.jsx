@@ -60,7 +60,7 @@ function FileUploadModal({ isOpenFileModal, setIsOpenFileModal }) {
             const data = await res.json()
 
             if (data.status === 'error') throw new Error(data.message)
-
+            
             setModelData(data?.result)
             setDatabase(data?.database)
             const first_pathway = Object.keys(data?.result)[0]
@@ -110,7 +110,6 @@ function FileUploadModal({ isOpenFileModal, setIsOpenFileModal }) {
         const result = batchExtractWithPositions(inputList)
 
         const result2 = formatModelData(inputList)
-
       
         setModelData(result2)
 

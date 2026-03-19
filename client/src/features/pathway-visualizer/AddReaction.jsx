@@ -32,6 +32,7 @@ function AddReaction({
             )
 
             const data = await res.json();
+            console.log(data)
             if(data.status === 'error')
                 throw new Error(data.message)
             setAddReactionFullData(data?.result)

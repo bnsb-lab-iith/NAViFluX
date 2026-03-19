@@ -11,6 +11,8 @@ function FluxModal({
     setIsOpenFluxModal,
     reactionBoundsFlux,
     setReactionBoundsFlux,
+    blockedReactions,
+    setBlockedReactions,
 }) {
     const {
         modelData,
@@ -185,9 +187,7 @@ function FluxModal({
 
         // Keep only the first two columns, modify the second as percentage
         const csvRows = [
-            [columns[0], 'Percentage Reduction in Growth'].join(
-                ','
-            ),
+            [columns[0], 'Percentage Reduction in Growth'].join(','),
             ...data.map((row) => {
                 const id = row[0][0] // assuming your ID is in row[0][0]
                 const growth = row[1]
@@ -205,7 +205,6 @@ function FluxModal({
                     if (percentage > 100) percentage = 100
                     else if (percentage < 0) percentage = 0
                 }
-    
 
                 return [id, percentage].join(',')
             }),
@@ -337,6 +336,13 @@ function FluxModal({
                 })
 
                 fluxes = flux_obj
+            } else if (fluxType == 'blocked') {
+                console.log(data.blocked_reactions)
+                const flux_obj = {}
+                data.blocked_reactions.map((rxn) => (flux_obj[rxn] = 100))
+                setBlockedReactions(data.blocked_reactions)
+                console.log(fluxes)
+                fluxes = flux_obj
             } else if (fluxType !== 'fva' && fluxType !== 'sgd') {
                 fluxes = data.fluxes
             } else {
@@ -377,16 +383,46 @@ function FluxModal({
                     metabolites: updatedMetabolites,
                 }
             })
-
+            console.log(finalModelData)
             setModelData(finalModelData)
 
             if (fluxType === 'loopless') {
                 downloadFluxesAsCSV(data.fluxes, bounds, 'cycle_free_flux.csv')
                 setEdgeFormat('flux')
                 setColorAction('flux')
+            } else if (fluxType === 'blocked') {
+                setEdgeFormat('weight')
+                setColorAction('weight')
+                const header = ['Blocked Reactions']
+
+                const rows = data.blocked_reactions.map((rxn) => [rxn])
+
+                const csvContent = [
+                    header.join(','),
+                    ...rows.map((row) => row.join(',')),
+                ].join('\n')
+
+                const blob = new Blob([csvContent], {
+                    type: 'text/csv;charset=utf-8;',
+                })
+
+                const url = URL.createObjectURL(blob)
+                const link = document.createElement('a')
+
+                link.href = url
+                link.download = 'blocked_reactions.csv'
+                link.click()
+
+                URL.revokeObjectURL(url)
+                toast('Blocked Reactions are highlighted as red')
             } else if (fluxType === 'sgd') {
                 // downloadSGDCSV(data.sgd, 'sgd_result.csv')
-                downloadCSV2(data.sgd, bounds, data.objective_value, "sgd_results.csv")
+                downloadCSV2(
+                    data.sgd,
+                    bounds,
+                    data.objective_value,
+                    'sgd_results.csv'
+                )
                 setEdgeFormat('weight')
                 setColorAction('weight')
             } else if (fluxType === 'fva') {
@@ -596,6 +632,16 @@ function FluxModal({
                                     />
                                     Single Reaction Deletion
                                 </label>
+
+                                <label className="flex cursor-pointer items-center gap-2">
+                                    <input
+                                        type="radio"
+                                        value="blocked"
+                                        checked={fluxType === 'blocked'}
+                                        onChange={() => setFluxType('blocked')}
+                                    />
+                                    Blocked Reactions
+                                </label>
                             </div>
                             <button
                                 onClick={() => {
@@ -612,7 +658,7 @@ function FluxModal({
                         <div className="flex flex-col items-center justify-center py-6">
                             <Spinner />
                             <p className="mt-4 text-sm text-gray-600">
-                                Calculating flux...
+                                Performing Analysis on your model...
                             </p>
                         </div>
                     )}
@@ -620,7 +666,7 @@ function FluxModal({
                         <>
                             <div className="my-4 gap-2 text-center text-sm font-semibold text-green-700">
                                 <span>✅</span>
-                                <span>Flux calculated successfully !</span>
+                                <span>Analysis Performed Successfully !</span>
                             </div>
                             <button
                                 onClick={() => {

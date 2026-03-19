@@ -29,6 +29,8 @@ import CytoscapeComponent from 'react-cytoscapejs'
 import FluxWeightFileUpload from '../features/pathway-visualizer/FluxWeightFileUpload'
 import MetabolomicsFileUpload from '../features/pathway-visualizer/MetabolomicsFileUpload'
 import ORAmodal from '../features/pathway-visualizer/ORAmodal'
+import DeleteGenesModal from '../features/pathway-visualizer/DeleteGenesModal'
+import FluxSamplingModal from '../features/pathway-visualizer/FluxSamplingModal'
 
 const toolButtons = [
     {
@@ -107,12 +109,6 @@ function PathwayViz() {
         visualizerRef.current?.deleteModeNode()
     }
 
-    function handleReset() {
-        setModelData(JSON.parse(JSON.stringify(initialModelData)))
-        toast.success('Reverted to initial model state.')
-        setBatchOutput(JSON.parse(JSON.stringify(initialBatchOutputData)))
-    }
-
     const existingSubsystems = Array.from(new Set(Object.keys(modelData || {})))
     const [nodes, setNodes] = useState([])
     const [edges, setEdges] = useState([])
@@ -120,6 +116,8 @@ function PathwayViz() {
     const [isOpenFileModal, setIsOpenFileModal] = useState(false)
     const [minFlux, setMinFlux] = useState(-1000)
     const [maxFlux, setMaxFlux] = useState(1000)
+
+    const [isOpenDeleteGeneModal, setIsOpenDeleteGeneModal] = useState(false)
 
     /// states for adding reaction
     const [selectingActionNode, setSelectingActionNode] = useState(false)
@@ -197,6 +195,8 @@ function PathwayViz() {
             pathwayObj.metabolites = pathwayObj.metabolites || {}
             pathwayObj.currency_edges = pathwayObj.currency_edges || []
             pathwayObj.stoichiometry = pathwayObj.stoichiometry || {}
+            pathwayObj.genes = pathwayObj.genes || {}
+            pathwayObj.gpr = pathwayObj.gpr || {}
 
             const dataToBeAdded = {}
             const data = addReaactionFullData[enz]
@@ -218,6 +218,10 @@ function PathwayViz() {
 
                 if (!pathwayObj.genes[enzyme]) {
                     pathwayObj.genes[enzyme] = []
+                }
+
+                if (!pathwayObj.gpr[enzyme]) {
+                    pathwayObj.gpr[enzyme] = ''
                 }
 
                 if (!pathwayObj.enzyme_crossref[enzyme]) {
@@ -340,6 +344,8 @@ function PathwayViz() {
         pathwayObj.metabolites = pathwayObj.metabolites || {}
         pathwayObj.currency_edges = pathwayObj.currency_edges || []
         pathwayObj.stoichiometry = pathwayObj.stoichiometry || {}
+        pathwayObj.genes = pathwayObj.genes || {}
+        pathwayObj.gpr = pathwayObj.gpr || {}
 
         const dataToBeAdded = {}
         const data = gapFillingFullData[selectedEnzyme]
@@ -368,6 +374,9 @@ function PathwayViz() {
 
             if (!pathwayObj.genes[enzyme]) {
                 pathwayObj.genes[enzyme] = []
+            }
+            if (!pathwayObj.gpr[enzyme]) {
+                pathwayObj.gpr[enzyme] = []
             }
 
             if (!pathwayObj.enzyme_crossref[enzyme]) {
@@ -438,6 +447,7 @@ function PathwayViz() {
         useState(false)
     const [stepFluxCalculation, setStepFluxCalculation] = useState('')
     const [isOpenFluxModal, setIsOpenFluxModal] = useState(false)
+    const [blockedReactions, setBlockedReactions] = useState(false)
     const [isOpenImageModal, setIsOpenImageModal] = useState(false)
     const [reactionBoundsFlux, setReactionBoundsFlux] = useState({})
     const [fluxKeyword, setFluxKeyword] = useState('')
@@ -685,6 +695,16 @@ function PathwayViz() {
                     ...pathwayData.stoichiometry,
                 }
 
+                acc.genes = {
+                    ...acc.genes,
+                    ...pathwayData.genes,
+                }
+
+                acc.gpr = {
+                    ...acc.gpr,
+                    ...pathwayData.gpr,
+                }
+
                 return acc
             },
             {
@@ -694,6 +714,8 @@ function PathwayViz() {
                 metabolites: {},
                 enzyme_crossref: {},
                 stoichiometry: {},
+                genes: {},
+                gpr: {},
             }
         )
 
@@ -742,14 +764,22 @@ function PathwayViz() {
 
     const [isOpenORAmodal, setIsOpenORAmodal] = useState(false)
 
+    const [isOpenFluxSamplingModal, setIsOpenFluxSamplingModal] =
+        useState(false)
+    const [stepFluxSampling, setStepFluxSampling] = useState('upload')
+
+    function resetFluxSampling() {
+        setStepFluxSampling('upload')
+    }
+
     function resetGSEA() {
-        setGSEAtable(null)
+        setStepGSEA('upload')
         setGSEAnodes(null)
         setGSEAedges(null)
-        setSelectedColumn('FDR q-val')
-        setLeadGenes(null)
+        setGSEAtable(null)
         setExpandedRow(null)
-        setStepGSEA('upload')
+        setLeadGenes(null)
+        setSelectedColumn('FDR q-val')
     }
 
     const handleRowClick = (idx, genes) => {
@@ -769,6 +799,14 @@ function PathwayViz() {
         )
 
         return { nodes: subNodes, edges: subEdges }
+    }
+
+    function handleReset() {
+        setBlockedReactions(null)
+        setModelData(JSON.parse(JSON.stringify(initialModelData)))
+        toast.success('Reverted to initial model state.')
+        setSelectedPathways([])
+        setBatchOutput(JSON.parse(JSON.stringify(initialBatchOutputData)))
     }
 
     useEffect(() => {
@@ -854,7 +892,9 @@ function PathwayViz() {
                     colorAction,
                     allFluxValues,
                     edgeFormat,
-                    allMetabolomicsValues
+                    allMetabolomicsValues,
+                    blockedReactions,
+                    null
                 )
 
             const applyLayout = async () => {
@@ -1111,6 +1151,11 @@ function PathwayViz() {
                     resetGSEA={resetGSEA}
                     isOpenORAmodal={isOpenORAmodal}
                     setIsOpenORAmodal={setIsOpenORAmodal}
+                    setIsOpenDeleteGeneModal={setIsOpenDeleteGeneModal}
+                    setIsOpenFluxSamplingModal={setIsOpenFluxSamplingModal}
+                    resetFluxSampling={resetFluxSampling}
+                    stepFluxSampling={stepFluxSampling}
+                    setStepFluxSampling={setStepFluxSampling}
                 />
                 <div className="overflow-hidden px-6">
                     <NetworkEditor
@@ -2168,6 +2213,8 @@ function PathwayViz() {
                 stepFluxCalculation={stepFluxCalculation}
                 reactionBoundsFlux={reactionBoundsFlux}
                 setReactionBoundsFlux={setReactionBoundsFlux}
+                blockedReactions={blockedReactions}
+                setBlockedReactions={setBlockedReactions}
             />
             <ExportAsImageModal
                 isOpenImageModal={isOpenImageModal}
@@ -2211,6 +2258,18 @@ function PathwayViz() {
             <FluxWeightFileUpload
                 isOpenFluxWeightFileModal={isOpenFluxWeightFileModal}
                 setIsOpenFluxWeightModal={setIsOpenFluxWeightModal}
+            />
+
+            <DeleteGenesModal
+                isOpenDeleteGeneModal={isOpenDeleteGeneModal}
+                setIsOpenDeleteGeneModal={setIsOpenDeleteGeneModal}
+            />
+
+            <FluxSamplingModal
+                isOpenFluxSamplingModal={isOpenFluxSamplingModal}
+                setIsOpenFluxSamplingModal={setIsOpenFluxSamplingModal}
+                stepFluxSampling={stepFluxSampling}
+                setStepFluxSampling={setStepFluxSampling}
             />
             <footer className="bg-stone-200 py-6 text-center text-sm text-stone-600">
                 © 2025 NAViFluX, Biological Networks and Systems Biology Lab,

@@ -22,6 +22,7 @@ export function formatModelData(networkList) {
         const metabolites = {}
         const currency_edges = cur_edges
         const genes = {}
+        const gpr = {}
         const enzyme_crossref = {}
         const stoichiometry = {}
 
@@ -44,6 +45,7 @@ export function formatModelData(networkList) {
                     subs
                 ]
                 genes[abbr] = node.data.gene
+                gpr[abbr] = node.data.gpr
                 enzyme_crossref[abbr] = {"BIGG": node.data.BIGG_crossref, "KEGG": node.data.KEGG_crossref, "EC": node.data.EC_crossref}
                 stoichiometry[abbr] = stoich
             } else {
@@ -64,6 +66,7 @@ export function formatModelData(networkList) {
             metabolites,
             currency_edges,
             genes,
+            gpr,
             enzyme_crossref,
             stoichiometry
         }

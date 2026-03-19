@@ -15,7 +15,7 @@
   <img src="https://img.shields.io/badge/backend-Flask-lightgrey.svg" />
   <img src="https://img.shields.io/badge/python-3.13-blue.svg" />
   <img src="https://img.shields.io/badge/nodejs-%3E=18-brightgreen.svg" />
-  <a href="https://doi.org/10.5281/zenodo.18137089">
+  <a href="https://doi.org/10.5281/zenodo.19107831">
     <img src="https://zenodo.org/badge/DOI/10.5281/zenodo.18137089.svg" />
   </a>
 </p>
@@ -40,7 +40,7 @@ To know more about NAViFluX and it's use cases we highly recommend you to check 
 To run the application locally, please ensure the required dependencies are installed on your system. Follow the steps below based on your operating system.
 
 
-## 🟢 NodeJS Installation
+## NodeJS Installation
 
 ### Step 1: Download Node.js
 
@@ -83,11 +83,11 @@ If both commands return version numbers, Node.js and npm are installed successfu
 
 ---
 
-## 🐍 Python Installation (Python 3.13)
+## Python Installation (Python 3.12)
 
 ### Step 1: Download Python
 
-Download **Python 3.13** from the official website:
+Download **Python 3.12** from the official website:
 [https://www.python.org/downloads/](https://www.python.org/downloads/)
 
 * **Windows**: Windows installer (64-bit)
@@ -112,19 +112,19 @@ Download **Python 3.13** from the official website:
 
 ```bash
 sudo apt update
-sudo apt install python3.13 python3.13-venv python3.13-dev
+sudo apt install python3.12 python3.12-venv python3.12-dev
 ```
 
-If Python 3.13 is not available via `apt`, install from source:
+If Python 3.12 is not available via `apt`, install from source:
 
 ```bash
 sudo apt install build-essential libssl-dev zlib1g-dev \
 libncurses5-dev libncursesw5-dev libreadline-dev libsqlite3-dev \
 libgdbm-dev libbz2-dev liblzma-dev tk-dev wget
 
-wget https://www.python.org/ftp/python/3.13.0/Python-3.13.0.tgz
-tar -xf Python-3.13.0.tgz
-cd Python-3.13.0
+wget https://www.python.org/ftp/python/3.12.0/Python-3.12.0.tgz
+tar -xf Python-3.12.0.tgz
+cd Python-3.12.0
 ./configure --enable-optimizations
 make -j$(nproc)
 sudo make altinstall
@@ -147,7 +147,7 @@ python3 --version
 Expected output:
 
 ```text
-Python 3.13.x
+Python 3.12.x
 ```
 
 
@@ -257,7 +257,7 @@ If you use **NAViFluX** in your research, please cite:
 
 > **Manjunatha Beduru Krishnamurthy, P S Harish, & Abhishek Subramanian** (2026).  
 > *NAViFluX: a visualization-centric platform for interactive analysis, refinement and design of genome-scale metabolic networks*.  
-> Zenodo. https://doi.org/10.5281/zenodo.18137089
+> Zenodo. https://doi.org/10.5281/zenodo.19107831
 
 
 ## License

@@ -228,8 +228,10 @@ function ModelBuilder() {
             data.genes = genes
             data.bounds = bounds
             data.subsystem = subsystem
+            data.gpr = ""
             reactionList[enz] = data
         })
+
 
         const { nodes, edges } = createNodeAndEdges(
             reactionList,
@@ -237,6 +239,8 @@ function ModelBuilder() {
             edgeHandleCache,
             modelData
         )
+
+        console.log(nodes, edges)
 
         const editorRef = targetCanvas.ref?.current
         if (!editorRef) return alert('Editor not ready')
@@ -304,6 +308,7 @@ function ModelBuilder() {
         setTempInput({})
     }
 
+    console.log(modelData)
     const handleCheckboxAddReactions = (enzyme) => {
         setNewReactions((prev) => {
             const isSelected = prev.includes(enzyme)
@@ -391,6 +396,7 @@ function ModelBuilder() {
         const subsystem = gapFillSubsystems[selectedEnzyme] || 'Not Assigned'
         data.bounds = bounds
         data.subsystem = subsystem
+        data.grp = ""
         data.genes = gapFillingGenes[selectedEnzyme] || []
         const reactionList = {}
         reactionList[selectedEnzyme] = data
@@ -503,6 +509,7 @@ function ModelBuilder() {
                     enzymes: {},
                     metabolites: {},
                     genes: {},
+                    gpr: {}
                 })
         )
 
@@ -520,8 +527,11 @@ function ModelBuilder() {
                     newPathObj.metabolites[met] = description
                 })
                 newPathObj.genes[enzyme] = enzObj.genes
+                newPathObj.gpr[enzyme] = enzObj.gpr
             })
         })
+
+        console.log(finalModelData)
 
         try {
             setIsDownloadingEdgeList(true)
@@ -703,6 +713,7 @@ function ModelBuilder() {
             data.subsystem = subsystem
             const genes = singleReactionGenes[enz] || []
             data.genes = genes
+            data.gpr = ""
             reactionList[enz] = data
         })
 
@@ -1105,6 +1116,7 @@ function ModelBuilder() {
                     enzymes: {},
                     metabolites: {},
                     genes: {},
+                    gpr: {},
                     enzyme_crossref: {},
                     stoichiometry: {},
                 })
@@ -1131,6 +1143,7 @@ function ModelBuilder() {
                     newPathObj.metabolites[met] = description
                 })
                 newPathObj.genes[enzyme] = enzObj.genes
+                newPathObj.gpr[enzyme] = enzObj.gpr
                 newPathObj.enzyme_crossref[enzyme] = {
                     BIGG: [],
                     EC: [],

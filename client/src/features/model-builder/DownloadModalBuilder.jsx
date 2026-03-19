@@ -51,6 +51,7 @@ function DownloadModal({
                     enzymes: {},
                     metabolites: {},
                     genes: {},
+                    gpr: {},
                     enzyme_crossref: {},
                     stoichiometry: {}
                 })
@@ -72,10 +73,13 @@ function DownloadModal({
                     newPathObj.metabolites[met] = description
                 })
                 newPathObj.genes[enzyme] = enzObj.genes
+                newPathObj.gpr[enzyme] = enzObj.gpr
                 newPathObj.enzyme_crossref[enzyme] = {"BIGG": [], "EC": [], "KEGG": []}
                 newPathObj.stoichiometry[enzyme] = enzObj.stoichiometry
             })
         })
+
+        console.log(finalModelData)
         
         try {
             setStepDownloadModal('loading')

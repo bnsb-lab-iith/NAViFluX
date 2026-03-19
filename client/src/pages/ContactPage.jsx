@@ -56,12 +56,12 @@ function ContactPage() {
                 </p>
 
                 {/* Contact Info Cards */}
-                <div className="mt-16 grid gap-8 md:grid-cols-3">
+                <div className="mt-16 grid gap-8 md:grid-cols-2">
                     <div className="flex flex-col items-center rounded-xl bg-white p-8 shadow-lg transition-transform hover:-translate-y-2 hover:shadow-2xl">
                         <Github className="mb-4 text-5xl text-[#003399]" />
                         <h3 className="text-lg font-semibold">Documentation</h3>
                         <a
-                            href="https://github.com/your-org/your-docs-repo"
+                            href="https://bnsb-lab-iith.github.io/NAViFluX-Documentation/"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="mt-2 text-[#003399] hover:underline"
@@ -71,6 +71,19 @@ function ContactPage() {
                     </div>
 
                     <div className="flex flex-col items-center rounded-xl bg-white p-8 shadow-lg transition-transform hover:-translate-y-2 hover:shadow-2xl">
+                        <Github className="mb-4 text-5xl text-[#003399]" />
+                        <h3 className="text-lg font-semibold">Tool</h3>
+                        <a
+                            href="https://github.com/bnsb-lab-iith/NAViFluX"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="mt-2 text-[#003399] hover:underline"
+                        >
+                            View on GitHub
+                        </a>
+                    </div>
+
+                    <div className="md:col-span-2 flex flex-col items-center rounded-xl bg-white p-8 shadow-lg transition-transform hover:-translate-y-2 hover:shadow-2xl">
                         <MapPin className="mb-4 text-5xl text-[#003399]" />
                         <h3 className="text-lg font-semibold">Address</h3>
                         <p className="mt-2 max-w-xs text-stone-600">
@@ -79,39 +92,11 @@ function ContactPage() {
                         </p>
                     </div>
 
-                    <div className="flex flex-col items-center rounded-xl bg-white p-8 shadow-lg transition-transform hover:-translate-y-2 hover:shadow-2xl">
-                        <Github className="mb-4 text-5xl text-[#003399]" />
-                        <h3 className="text-lg font-semibold">Tool</h3>
-                        <a
-                            href="https://github.com/your-org/your-tool-repo"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="mt-2 text-[#003399] hover:underline"
-                        >
-                            View on GitHub
-                        </a>
-                    </div>
+                    
                 </div>
 
-                {/* Embedded Google Form */}
-                <div className="mt-20 w-full max-w-3xl overflow-hidden rounded-xl bg-white p-6 shadow-lg">
-                    <h3 className="mb-6 text-2xl font-bold text-[#003399]">
-                        Send us a Message
-                    </h3>
 
-                    <iframe
-                        src="fwfweg"
-                        width="100%"
-                        height="600"
-                        frameBorder="0"
-                        marginHeight="0"
-                        marginWidth="0"
-                        className="rounded-lg"
-                        title="Contact Form"
-                    >
-                        Loading…
-                    </iframe>
-                </div>
+                
             </main>
 
             {/* FOOTER */}

@@ -59,6 +59,11 @@ function VizToolBar({
     resetGSEA,
     isOpenORAmodal,
     setIsOpenORAmodal,
+    setIsOpenDeleteGeneModal,
+    setIsOpenFluxSamplingModal,
+    resetFluxSampling,
+    stepFluxSampling,
+    setStepFluxSampling,
 }) {
     const [uploadOpen, setUploadOpen] = useState(false)
     const [analysisOpen, setAnalysisOpen] = useState(false)
@@ -328,6 +333,7 @@ function VizToolBar({
                                     setAnalysisOpen(!analysisOpen)
                                     resetAddReaction()
                                     resetGSEA()
+                                    resetFluxSampling()
                                     resetFillMissingReaction()
                                 }}
                                 className="flex w-full items-center gap-2 px-4 py-2.5 text-sm text-gray-700 transition-colors hover:bg-indigo-50 hover:text-indigo-600 disabled:cursor-not-allowed disabled:opacity-50"
@@ -343,6 +349,7 @@ function VizToolBar({
                                     setIsOpenCentralityModel(true)
                                     resetAddReaction()
                                     resetGSEA()
+                                    resetFluxSampling()
                                     resetFillMissingReaction()
                                     setAnalysisOpen(!analysisOpen)
                                     setStepFluxCalculation('')
@@ -350,6 +357,42 @@ function VizToolBar({
                                 className="px-4 py-2.5 text-left text-sm text-gray-700 transition-colors hover:bg-indigo-50 hover:text-indigo-600 disabled:cursor-not-allowed disabled:opacity-50"
                             >
                                 Model Network Analyses
+                            </button>
+
+                            <div className="border-t border-gray-100" />
+
+                            <button
+                                disabled={modelData === null}
+                                onClick={() => {
+                                    setIsOpenDeleteGeneModal(true)
+                                    resetAddReaction()
+                                    resetGSEA()
+                                    resetFluxSampling()
+                                    resetFillMissingReaction()
+                                    setAnalysisOpen(!analysisOpen)
+                                    setStepFluxCalculation('')
+                                }}
+                                className="flex w-full items-center gap-2 px-4 py-2.5 text-sm text-gray-700 transition-colors hover:bg-indigo-50 hover:text-indigo-600 disabled:cursor-not-allowed disabled:opacity-50"
+                            >
+                                Delete Genes
+                            </button>
+
+                            <div className="border-t border-gray-100" />
+
+                            <button
+                                disabled={modelData === null}
+                                onClick={() => {
+                                    setIsOpenFluxSamplingModal(true)
+                                    resetAddReaction()
+                                    resetGSEA()
+                                    setStepFluxSampling('upload')
+                                    resetFillMissingReaction()
+                                    setAnalysisOpen(!analysisOpen)
+                                    setStepFluxCalculation('')
+                                }}
+                                className="flex w-full items-center gap-2 px-4 py-2.5 text-sm text-gray-700 transition-colors hover:bg-indigo-50 hover:text-indigo-600 disabled:cursor-not-allowed disabled:opacity-50"
+                            >
+                                Flux Sampling
                             </button>
 
                             <div className="border-t border-gray-100" />
@@ -375,6 +418,7 @@ function VizToolBar({
                                             resetAddReaction()
                                             resetFillMissingReaction()
                                             setAnalysisOpen(false)
+                                            resetFluxSampling()
                                         }}
                                         className="flex w-full items-center px-4 py-2.5 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 disabled:cursor-not-allowed disabled:opacity-50"
                                     >
@@ -392,6 +436,7 @@ function VizToolBar({
                                             resetAddReaction()
                                             resetFillMissingReaction()
                                             setAnalysisOpen(false)
+                                            resetFluxSampling()
                                         }}
                                         className="flex w-full items-center px-4 py-2.5 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 disabled:cursor-not-allowed disabled:opacity-50"
                                     >

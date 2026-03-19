@@ -333,6 +333,8 @@ const NetworkEditor = forwardRef(
                     const { [enzymeId]: _c, ...newEnzymeCrossRef } =
                         subsystemData.enzyme_crossref
 
+                    const {[enzymeId]: _gpr, ...newGpr} = subsystemData.gpr
+
                     // 3. Clean up metabolites — only remove those not present in any remaining edges
                     const metabolitesInUse = new Set(
                         newEdges.flat().concat(newCurrencyEdges.flat())
@@ -352,6 +354,7 @@ const NetworkEditor = forwardRef(
                             enzymes: newEnzymes,
                             genes: newGenes,
                             metabolites: newMetabolites,
+                            gpr: newGpr,
                             enzyme_crossref: newEnzymeCrossRef,
                         },
                     }

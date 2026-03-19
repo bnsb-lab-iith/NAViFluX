@@ -14,14 +14,14 @@ export function generateReactFlowFromEdgeList(
     colorAction,
     allFluxValues,
     edgeFormat,
-    allMetabolomicsValues
+    allMetabolomicsValues,
+    blockedReactions,
+    curModuleReactions
 ) {
-    
     const obj = {} // enzyme metadata
     const meta_obj = {} // metabolite info
     const rawEdges = []
     const knownPathways = new Set(selectedPathways)
-   
 
     const minMetaboliteVal = Math.min(...allMetabolomicsValues)
     const maxMetaboliteVal = Math.max(...allMetabolomicsValues)
@@ -42,7 +42,6 @@ export function generateReactFlowFromEdgeList(
 
     const knownLabels = new Set()
     selectedPathways.forEach((path) => {
-        
         if (pathwayData[path]) {
             const {
                 enzymes = {},
@@ -50,23 +49,21 @@ export function generateReactFlowFromEdgeList(
                 metabolites = {},
                 genes = {},
                 enzyme_crossref = {},
+                gpr = {},
                 stoichiometry = {},
             } = pathwayData[path]
-
-           
 
             const enzymesWithSubsystem = {}
             for (const [enzyme, arr] of Object.entries(enzymes)) {
                 enzymesWithSubsystem[enzyme] = [
                     ...arr,
                     genes[enzyme],
+                    gpr[enzyme],
                     enzyme_crossref[enzyme],
-                    stoichiometry[enzyme]
+                    stoichiometry[enzyme],
                 ]
                 knownLabels.add(enzyme)
             }
-
-            
 
             for (const metId of Object.keys(metabolites)) {
                 knownLabels.add(metId)
@@ -174,12 +171,27 @@ export function generateReactFlowFromEdgeList(
                     upper_bound,
                     subsystem,
                     gene,
+                    gpr,
                     crossref,
                     stoich,
                 ] = obj[label]
                 const baseSize = 40
                 const maxSize = 120
                 const size = baseSize + normalize(flux) * (maxSize - baseSize)
+
+                let color
+
+                if (blockedReactions?.length) {
+                    color = blockedReactions.includes(label) ? 'red' : undefined
+                } else if (leadgenes?.length || curModuleReactions?.length) {
+                    color =
+                        leadgenes?.includes(label) ||
+                        curModuleReactions?.includes(label)
+                            ? 'green'
+                            : undefined
+                } else if (flux != null) {
+                    color = getFluxColor(flux)
+                }
 
                 nodes.push({
                     id: label,
@@ -196,18 +208,16 @@ export function generateReactFlowFromEdgeList(
                         subsystem: subsystem || 'Not Assigned',
                         lower_bound,
                         upper_bound,
-                        color:
-                            leadgenes && leadgenes.includes(label)
-                                ? 'green'
-                                : getFluxColor(flux),
+                        color: color ?? '#e0e0e0',
                         fontSize: fontSize,
                         size: size,
                         gene: gene,
+                        gpr: gpr,
                         type: 'reaction',
                         BIGG_crossref: crossref?.['BIGG'] || [],
                         KEGG_crossref: crossref?.['KEGG'] || [],
                         EC_crossref: crossref?.['EC'] || [],
-                        stoichiometry: stoich
+                        stoichiometry: stoich,
                     },
                 })
             } else if (meta_obj[label]) {
@@ -286,7 +296,7 @@ export function generateReactFlowFromEdgeList(
                 edges.push(
                     makeMonoEdge(
                         s,
-                        enzyme, 
+                        enzyme,
                         getNodeId(s),
                         enzymeId,
                         parsedFlux,
@@ -311,7 +321,7 @@ export function generateReactFlowFromEdgeList(
             products.forEach((p) =>
                 edges.push(
                     makeMonoEdge(
-                        p, 
+                        p,
                         enzyme,
                         getNodeId(p),
                         enzymeId,
@@ -323,7 +333,7 @@ export function generateReactFlowFromEdgeList(
             substrates.forEach((s) =>
                 edges.push(
                     makeMonoEdge(
-                        enzyme, 
+                        enzyme,
                         s,
                         enzymeId,
                         getNodeId(s),
@@ -337,7 +347,7 @@ export function generateReactFlowFromEdgeList(
             substrates.forEach((s) =>
                 edges.push(
                     makeBidirectionalEdge(
-                        s, 
+                        s,
                         enzyme,
                         getNodeId(s),
                         enzymeId,
@@ -350,8 +360,8 @@ export function generateReactFlowFromEdgeList(
             products.forEach((p) =>
                 edges.push(
                     makeBidirectionalEdge(
-                        enzyme, 
-                        p, 
+                        enzyme,
+                        p,
                         enzymeId,
                         getNodeId(p),
 
@@ -365,7 +375,7 @@ export function generateReactFlowFromEdgeList(
             substrates.forEach((s) =>
                 edges.push(
                     makeMonoEdge(
-                        s, 
+                        s,
                         enzyme,
                         getNodeId(s),
                         enzymeId,
@@ -377,8 +387,8 @@ export function generateReactFlowFromEdgeList(
             products.forEach((p) =>
                 edges.push(
                     makeMonoEdge(
-                        enzyme, 
-                        p, 
+                        enzyme,
+                        p,
                         enzymeId,
                         getNodeId(p),
                         parsedFlux,
@@ -391,8 +401,8 @@ export function generateReactFlowFromEdgeList(
             products.forEach((p) =>
                 edges.push(
                     makeMonoEdge(
-                        p, 
-                        enzyme, 
+                        p,
+                        enzyme,
                         getNodeId(p),
                         enzymeId,
                         parsedFlux,
@@ -403,8 +413,8 @@ export function generateReactFlowFromEdgeList(
             substrates.forEach((s) =>
                 edges.push(
                     makeMonoEdge(
-                        enzyme, 
-                        s, 
+                        enzyme,
+                        s,
                         enzymeId,
                         getNodeId(s),
                         parsedFlux,
@@ -417,8 +427,8 @@ export function generateReactFlowFromEdgeList(
             substrates.forEach((s) =>
                 edges.push(
                     makeMonoEdge(
-                        s, 
-                        enzyme, 
+                        s,
+                        enzyme,
                         getNodeId(s),
                         enzymeId,
                         parsedFlux,
@@ -429,8 +439,8 @@ export function generateReactFlowFromEdgeList(
             products.forEach((p) =>
                 edges.push(
                     makeMonoEdge(
-                        enzyme, 
-                        p, 
+                        enzyme,
+                        p,
                         enzymeId,
                         getNodeId(p),
                         parsedFlux,
@@ -443,7 +453,14 @@ export function generateReactFlowFromEdgeList(
 
     return { nodes, edges }
 
-    function makeMonoEdge(actual_source, actual_target, source, target, flux, colorAction) {
+    function makeMonoEdge(
+        actual_source,
+        actual_target,
+        source,
+        target,
+        flux,
+        colorAction
+    ) {
         const sourcePathway = source.split('__')[0]
         const handleKey = `${actual_source}-${actual_target}`
         const edgeHandle =
@@ -451,8 +468,8 @@ export function generateReactFlowFromEdgeList(
 
         return {
             id: `edge_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
-            source_id: source, 
-            target_id: target, 
+            source_id: source,
+            target_id: target,
             source: actual_source,
             target: actual_target,
             sourceHandle: edgeHandle.sourceHandle || 'right',
@@ -480,7 +497,14 @@ export function generateReactFlowFromEdgeList(
         }
     }
 
-    function makeBidirectionalEdge(actual_source, actual_target, source, target, flux, colorAction) {
+    function makeBidirectionalEdge(
+        actual_source,
+        actual_target,
+        source,
+        target,
+        flux,
+        colorAction
+    ) {
         const sourcePathway = source.split('__')[0]
         const handleKey = `${actual_source}-${actual_target}`
         const edgeHandle =
@@ -488,8 +512,8 @@ export function generateReactFlowFromEdgeList(
 
         return {
             id: `edge_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
-            source_id: source, 
-            target_id: target, 
+            source_id: source,
+            target_id: target,
             source: actual_source,
             target: actual_target,
             sourceHandle: edgeHandle.sourceHandle || 'right',

@@ -97,9 +97,9 @@ function AddFullReaction({
                             />
                             <button
                                 onClick={() => {
-                                    if (query.length < 4) {
+                                    if (query.length < 3) {
                                         alert(
-                                            'Query cannot be less than 4 characters'
+                                            'Query cannot be less than 3 characters'
                                         )
                                         return
                                     }

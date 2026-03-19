@@ -5,6 +5,12 @@
 echo "--- Installing Server Dependencies ---"
 SERVER_PATH="./server"
 
+if ! command -v python3.12 &> /dev/null
+then
+    echo "Error: Python 3.12 is required but not installed."
+    exit 1
+fi
+
 if [ ! -d "$SERVER_PATH" ]; then
     echo "Error: Server folder not found at $SERVER_PATH. Aborting."
     exit 1
@@ -14,7 +20,7 @@ if [ -f "$SERVER_PATH/requirements.txt" ]; then
     # Create and activate virtual environment
     if [ ! -d "$SERVER_PATH/venv" ]; then
         echo "Creating Python virtual environment in $SERVER_PATH..."
-        python3 -m venv "$SERVER_PATH/venv"
+        python3.12 -m venv "$SERVER_PATH/venv"
     fi
 
     echo "Installing/Updating Python requirements..."

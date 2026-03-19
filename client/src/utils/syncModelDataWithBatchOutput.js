@@ -633,5 +633,7 @@ export function syncModelDataWithBatchOutput(
         }
     })
 
+    console.log(allEdges, allNodes)
+
     return { nodes: allNodes, edges: allEdges }
 }
