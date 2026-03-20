@@ -253,7 +253,26 @@ Once you execute the commands on both the terminals successfully, open the termi
 
 ## Test Datasets
 
-The test data can be found in the /data/TEST directory.
+The test data can be found in the `/data/TEST` directory.
+
+### macOS Note
+
+On macOS, loading `.mat` (MATLAB) model files may fail due to **incompatibilities in the scientific Python stack (SciPy / NumPy) on Python 3.12**, especially for certain MAT file formats. This can result in errors such as:
+
+> *"Unknown mat file type, version 57, 52"*
+
+Although the same `.mat` files may work on Windows or Linux, macOS environments often handle MAT file parsing differently due to differences in compiled dependencies and library support.
+
+### Recommendation
+
+Mac users are advised to use:
+
+* **SBML files (`.xml`)** 
+* **JSON models (`.json`)** 
+
+instead of `.mat` files.
+
+These formats are **cross-platform stable** and ensure consistent behavior across all systems.
 
 ## Citation
 
