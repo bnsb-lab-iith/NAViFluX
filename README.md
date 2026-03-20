@@ -141,7 +141,7 @@ python --version
 or
 
 ```bash
-python3 --version
+python3.12 --version
 ```
 
 Expected output:
