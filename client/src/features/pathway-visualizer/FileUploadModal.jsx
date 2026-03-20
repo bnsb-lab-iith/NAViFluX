@@ -112,6 +112,9 @@ function FileUploadModal({ isOpenFileModal, setIsOpenFileModal }) {
         const result2 = formatModelData(inputList)
       
         setModelData(result2)
+        console.log(result2)
+        const first_pathway = Object.keys(result2)[0]
+        handleCheckboxChangePathway(first_pathway)
 
         setInitialModelData(JSON.parse(JSON.stringify(result2)))
         // setInitialModelData(result)

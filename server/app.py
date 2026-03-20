@@ -467,7 +467,10 @@ def analyseModel():
         return jsonify(response)
 
     except Exception as e:
-        return f"Error loading model: {str(e)}", 500
+        return jsonify({
+            "status": "error",
+            "message": str(e)
+        })
     
 @app.route('/api/v1/add-reactions', methods=['POST']) 
 def addReactions():
