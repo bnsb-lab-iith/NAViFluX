@@ -278,9 +278,10 @@ These formats are **cross-platform stable** and ensure consistent behavior acros
 
 If you use **NAViFluX** in your research, please cite:
 
-> **Manjunatha Beduru Krishnamurthy, P S Harish, & Abhishek Subramanian** (2026).  
-> *NAViFluX: a visualization-centric platform for interactive analysis, refinement and design of genome-scale metabolic networks*.  
-> Zenodo. https://doi.org/10.5281/zenodo.19107831
+> **Manjunatha Beduru Krishnamurthy, Pasupula Sridhar Harish, Abhishek Subramanian,** (2026).  
+> *NAViFluX: a visualization‑centric platform for interactive analysis, refinement and design of genome‑scale metabolic networks,*.  
+> Bioinformatics, Volume 42, Issue 5, May 2026, btag191,
+> https://doi.org/10.1093/bioinformatics/btag191
 
 
 ## License
